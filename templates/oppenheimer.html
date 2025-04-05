@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="Oppenheimer" >Oppenheimer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .top-bar a, .top-bar button {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back-home {
+            background-color: #4a320d;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-back-home:hover {
+            background-color: #7e612c;
+        }
+
+        .control-btn {
+            background: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+        }
+
+        #gif-container {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            height: 70vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gif {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        .gif.active {
+            display: block;
+        }
+
+        .content {
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        h1, h2 {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #000000;
+        }
+     </style>
+
+   <script>
+    const translations = {
+
+        en: {
+    home: "Home",
+    genres: "Genres",
+    soundtrack: "Soundtrack ♬",
+    Oppenheimer: "Oppenheimer",
+    description: "Oppenheimer is a historical drama that tells the story of J. Robert Oppenheimer, the brilliant physicist who led the Manhattan Project during World War II and helped create the atomic bomb. The film explores his moral dilemmas, personal struggles, and the consequences of his groundbreaking work. As Oppenheimer grapples with the power of the bomb, the film delves into his complex relationships with fellow scientists, the government, and his own conscience. A tale of ambition, responsibility, and tragedy, Oppenheimer’s legacy remains one of the most controversial in modern history.",
+    details: "Details:",
+    yearOfProduction: "Year of Production: 2023",
+    platform: "Platform: Theaters, Digital Release",
+    country: "Country: USA 🇺🇸, UK 🇬🇧",
+    genre: "Genre: Drama, History, Biography",
+    tagline: "Tagline: The man who would shape the world with a weapon.",
+    worldPremiere: "World Premiere: July 21, 2023",
+    digitalRelease: "Digital Release: October 2023",
+    ageRating: "Age Rating: 16+",
+    episodeLength: "Movie Length: 2h 30min",
+    officialWebsite: "Official Website",
+    movie: "Oppenheimer (2023)",
+    contactUs: "Got Questions? Contact Us",
+    copyright: "© 2024 VivaCine, author: Alibek Onege."
+},
+        ru: {
+    home: "Главная",
+    genres: "Жанры",
+    soundtrack: "Саундтрек ♬",
+    Oppenheimer: "Опенгеймер",
+    description: "Опенгеймер — историческая драма, рассказывающая историю Дж. Роберта Оппенгеймера, выдающегося физика, который возглавил Манхэттенский проект во время Второй мировой войны и помог создать атомную бомбу. Фильм исследует его моральные дилеммы, личные переживания и последствия его потрясающей работы. Пока Оппенгеймер сталкивается с силой бомбы, фильм раскрывает его сложные отношения с коллегами-учеными, правительством и его совестью. История о амбициях, ответственности и трагедии, наследие Оппенгеймера остается одной из самых спорных в современной истории.",
+    details: "Детали:",
+    yearOfProduction: "Год производства: 2023",
+    platform: "Платформа: Кинотеатры, Цифровой релиз",
+    country: "Страна: США 🇺🇸, Великобритания 🇬🇧",
+    genre: "Жанр: Драма, История, Биография",
+    tagline: "Девиз: Человек, который хотел изменить мир с помощью оружия.",
+    worldPremiere: "Мировая премьера: 21 июля 2023",
+    digitalRelease: "Цифровой релиз: Октябрь 2023",
+    ageRating: "Возрастной рейтинг: 16+",
+    episodeLength: "Продолжительность фильма: 2 ч 30 мин",
+    officialWebsite: "Официальный сайт",
+    movie: "Опенгеймер (2023)",
+    contactUs: "Есть вопросы? Напишите нам",
+    copyright: "© 2024 VivaCine, автор: Алибек Онеге."
+},
+         kz: {
+   home: "Басты бет",
+    genres: "Жанрлар",
+    soundtrack: "Саундтрек ♬",
+    Oppenheimer: "Опенгеймер",
+    description: "Опенгеймер — екінші дүниежүзілік соғыс кезінде Манхэттен жобасын басқарған, атом бомбасын ойлап тапқан ғалым Дж. Роберт Оппенгеймердің өмірі туралы тарихи драма. Фильм оның моральдық таңдаулары, жеке күрестері және оның революциялық жұмысының салдары туралы баяндайды. Оппенгеймер атом бомбасын жасаудың күшін сезіне отырып, фильм оның басқа ғалымдармен, үкіметпен және өзінің ар-ұжданымен күресін суреттейді. Амбиция, жауапкершілік және қайғы-қасірет туралы әңгіме, Оппенгеймердің мұрасы заманауи тарихтағы ең даулы тұлғалардың бірі болып қала береді.",
+    details: "Детальдар:",
+    yearOfProduction: "Өндіріс жылы: 2023",
+    platform: "Платформа: Кинотеатрлар, Цифрлық шығарылым",
+    country: "Ел: АҚШ 🇺🇸, Ұлыбритания 🇬🇧",
+    genre: "Жанр: Драма, Тарих, Биография",
+    tagline: "Ұран: Әлемді қару арқылы өзгерткісі келген адам.",
+    worldPremiere: "Дүниежүзілік премьера: 21 шілде 2023",
+    digitalRelease: "Цифрлық шығарылым: Қазан 2023",
+    ageRating: "Жас санаты: 16+",
+    episodeLength: "Фильм ұзақтығы: 2 сағат 30 минут",
+    officialWebsite: "Ресми сайт",
+    movie: "Опенгеймер (2023)",
+    contactUs: "Сұрақтарыңыз бар ма? Бізге жазыңыз",
+    copyright: "© 2024 VivaCine, авторы: Әлібек Өнеге."
+    }
+        };
+
+
+function changeLanguage(lang) {
+    localStorage.setItem('lang', lang); // Сохраняем выбранный язык
+    applyTranslations(lang);           // Применяем переводы
+}
+
+
+function applyTranslations(lang) {
+    // Находим все элементы с атрибутом data-translate
+    const elements = document.querySelectorAll('[data-translate]');
+    elements.forEach(el => {
+        // Получаем ключ для перевода
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+            // Применяем перевод, если ключ существует
+            el.textContent = translations[lang][key];
+        }
+    });
+}
+
+// Устанавливаем язык при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('lang') || 'kz'; // Язык по умолчанию: казахский
+    applyTranslations(savedLang);
+});
+    </script>
+</head>
+<body>
+
+
+<div class="top-bar">
+    <a href="{{ url_for('index') }}" class="btn-back-home" data-translate="home">Home</a>
+    <a href="{{ url_for('genres') }}" class="btn-back-home" data-translate="genres">Genres</a>
+    <button class="control-btn" onclick="togglePlay()" data-translate="soundtrack">Soundtrack ♬</button>
+</div>
+<!-- Контейнер для GIF'ов -->
+<div id="gif-container">
+    <img class="gif" src="https://giffiles.alphacoders.com/219/219196.gif" alt="La Casa de Papel" />
+    <img class="gif" src=" https://miro.medium.com/v2/resize:fit:996/1*EjaiLitbeyWELyOBsScQWg.gif" alt="La Casa de Papel 2" />
+    <img class="gif" src="https://assets-prd.ignimgs.com/2023/07/18/atomic-1689675916689.gif" alt="La Casa de Papel 3" />
+    <img class="gif" src="https://i.pinimg.com/originals/a9/c0/c6/a9c0c6e98d32bb085f150dbebc529785.gif" alt="La Casa de Papel 4" />
+    <img class="gif" src="https://i.pinimg.com/originals/e2/75/78/e275783c9a40b4551481a75a542cdc79.gif" alt="La Casa de Papel 5" />
+</div>
+    <div class="content">
+        <header>
+            <h1 data-translate="Oppenheimer">Oppenheimer</h1>
+        </header>
+
+        <section>
+            <p data-translate="description">Pirates of the Caribbean is a mesmerizing saga of the sea, freedom, and mysticism, where the fates of daring adventurers intertwine with legends. The cunning and resourceful **Captain Jack Sparrow** finds himself at the heart of a battle for ships, treasures, and immortality. Love, betrayal, curses, and naval battles drive the heroes through the storms of time, turning each adventure into a legend. Here, the line between myth and reality blurs, and the waves whisper secrets of the past.</p>
+        </section>
+
+       <section class="details">
+    <h2 data-translate="details"> Details:</h2>
+    <ul>
+    <li data-translate="yearOfProduction">Year of Production: 2018</li>
+    <li data-translate="platform">Platform: Netflix, Prime Video, Apple TV</li>
+    <li data-translate="country">Country: USA 🇺🇸</li>
+    <li data-translate="genre">Genre: Comedy, Crime, Thriller</li>
+    <li data-translate="tagline">Tagline: "One woman more – one problem less"</li>
+    <li data-translate="worldPremiere">World Premiere: June 8, 2018 </li>
+    <li data-translate="digitalRelease">Digital Release: July 17, 2018</li>
+    <li data-translate="ageRating">Age Rating: 12+</li>
+    <li data-translate="episodeLength">Episode Length: 1h 50min</li>
+</ul>
+
+
+ <div class="video-container">
+    <p class="video-title" data-translate="season1Episode1">
+    </p>
+    <iframe src="https://drive.google.com/file/d/15QZr12ZTgRq8bOGy6jWSr5SY1WhnBKNM/preview" width="900" height="500" allow="autoplay; fullscreen" allowfullscreen></iframe>
+</div>
+
+
+
+</section>
+    </div>
+
+    <footer>
+    <div class="footer-content">
+
+        <div class="social-media">
+            <a href="https://www.facebook.com/?locale=ru_RU" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="https://x.com/?lang=ru" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+    <div class="footer-buttons">
+        <a href="/chat" class="contact-button" data-translate="contactUs" >Do you have any questions? Write to us</a>
+    </div>
+    <div class="footer-bottom">
+        <p data-translate="copyright">&copy; 2024 VivaCine by Alibek Onege.</p>
+    </div>
+</footer>
+<style>
+    footer {
+        background-color: #000;
+        color: #fff;
+        padding: 30px 0;
+        font-family: 'Arial', sans-serif;
+        text-align: center; /* Center the footer content */
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center; /* Center the content */
+        align-items: center;
+        margin-bottom: 20px;
+        flex-direction: column; /* Stack elements vertically */
+    }
+
+    .contacts p {
+        margin: 10px 0;
+        font-size: 15px;
+        font-weight: normal; /* Make the text normal weight */
+        pointer-events: none; /* Prevent text from being clickable */
+    }
+
+    .social-media {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .social-icon {
+        color: #fff;
+        font-size: 40px;
+        transition: color 0.3s ease;
+    }
+
+    .social-icon:hover {
+        color: #ff8c00; /* Hover color */
+    }
+
+    .footer-buttons {
+        margin-top: 20px;
+    }
+
+    .contact-button {
+        background-color: #020202;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .contact-button:hover {
+        background-color: #020202;
+        transform: scale(1.1);
+    }
+
+    .footer-bottom {
+        font-size: 14px;
+        opacity: 0.7;
+        margin-top: 20px;
+    }
+</style>
+<!-- Встроенный YouTube аудио -->
+<iframe id="audio" width="0" height="0" src="https://www.youtube.com/embed/Ja_ldPbvUN0?autoplay=1&enablejsapi=1" allow="autoplay" frameborder="0"></iframe>
+    <script>
+        let player;
+
+        // Инициализация YouTube Player API
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('audio', {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // Когда плеер готов
+        function onPlayerReady(event) {
+            console.log('Player Ready');
+        }
+
+        // Когда состояние плеера изменяется
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                console.log("Воспроизведение");
+            }
+            if (event.data === YT.PlayerState.PAUSED) {
+                console.log("Пауза");
+            }
+        }
+
+        // Функция для воспроизведения/паузы
+        function togglePlay() {
+            if (player) {
+                if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+                    player.pauseVideo();
+                } else {
+                    player.playVideo();
+                }
+            }
+        }
+
+        // Загружаем API YouTube
+        var script = document.createElement('script');
+        script.src = "https://www.youtube.com/iframe_api";
+        document.body.appendChild(script);
+
+        // Автозапуск GIF
+        const gifs = document.querySelectorAll('.gif');
+        let currentGifIndex = 0;
+
+        function showNextGif() {
+            gifs[currentGifIndex].classList.remove('active'); // Убираем активный класс с текущего GIF
+            currentGifIndex = (currentGifIndex + 1) % gifs.length; // Переходим к следующему GIF
+            gifs[currentGifIndex].classList.add('active'); // Добавляем активный класс к следующему GIF
+        }
+
+        gifs[currentGifIndex].classList.add('active'); // Делаем первый GIF активным
+        setInterval(showNextGif, 3000); // Переключаем GIF каждые 3 секунды
+    </script>
+</body>
+</html>
+
+

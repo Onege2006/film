@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Movies - VivaCine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lastra&display=swap" rel="stylesheet">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General styles */
+        html, body {
+            font-family: 'Lastra', serif;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #000; /* Черный фон */
+            color: #fff; /* Белый текст для контраста */
+        }
+        header {
+            background-color: #000;
+            padding: 45px 0;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #000; /* Задайте нужный цвет фона */
+            z-index: 1000; /* Чтобы панель оставалась над остальными элементами */
+            padding: 10px 0;
+        }
+
+        body {
+            padding-top: 60px; /* Отступ сверху, чтобы контент не скрывался под навигационной панелью */
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        nav ul li {
+            margin: 0 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px 25px;
+            transition: all 0.3s ease;
+        }
+        nav ul li a:hover {
+            background: linear-gradient(45deg, #d89b1d, #ff8c00);
+            color: black;
+            transform: scale(1.2);
+        }
+
+        h1, h2 {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            font-weight: bolder;
+            font-size: 50px;
+            color: #f5ce0f;
+        }
+        h1 {
+            font-size: 50px;
+        }
+        .language-buttons {
+  display: flex;
+  flex-direction: column; /* Расположить кнопки вертикально */
+  align-items: center; /* Центрировать кнопки по горизонтали */
+  margin-top: 0.5 px; /* Отступ сверху */
+}
+
+.lang-selector {
+  background-color: #000;
+  color: white;
+  border: none;
+  padding: 0px 20px; /* Размер кнопок меньше, чем у меню */
+  font-size: 10 px; /* Меньший размер текста */
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  margin: 0px 0; /* Отступ между кнопками */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lang-selector:hover {
+  background: linear-gradient(45deg, #d89b1d, #ff8c00);
+  color: black;
+  transform: scale(1.1);
+}
+
+.lang-selector:active {
+  transform: scale(1.05); /* Эффект нажатия */
+}
+ .subtitle {
+  color: #ffffff; /* Белый цвет текста */
+  font-size: 16px; /* Обычный размер шрифта */
+  font-weight: normal; /* Убирает жирность */
+  text-align: center; /* Центрирует текст */
+  margin-top: 10px; /* Отступ сверху */
+  line-height: 1.6; /* Увеличивает расстояние между строками для удобства чтения */
+  max-width: 800px; /* Ограничивает ширину текста */
+  margin-left: auto;
+  margin-right: auto; /* Центрирует текстовый блок */
+}
+
+
+        /* Genre catalog */
+        .genre-catalog {
+            padding: 40px;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+        .genre-catalog h2 {
+            color: #f5ce0f; /* Цвет заголовка */
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .genre-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .genre-card {
+            background-color: #020202;
+            width: 280px;
+            height: 400px;
+            border-radius: 0px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .genre-card img {
+            width: 100%;
+            height: 80%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .genre-card:hover img {
+            transform: scale(1.1);
+        }
+        .genre-card h3 {
+            font-size: 24px;
+            color: #f5ce0f;
+            margin: 10px 0;
+        }
+        /* Бургер и адаптивность */
+.mobile-menu-toggle {
+  display: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  z-index: 1001;
+}
+
+/* Мобильный стиль — только на маленьких экранах */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color: #000;
+    width: 100%;
+    padding: 20px 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-links li {
+    margin: 10px 0;
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+}
+
+   </style>
+   <script>
+       const translations = {
+    en: {
+        home: "Home",
+        Genres: "Genres",
+        sub: "Explore the genres that resonate with you. Below, you'll find a curated list of all our available genres, offering something for every taste. Whether you're into action-packed adventures, heartfelt dramas, or laugh-out-loud comedies, there's a genre waiting for you to dive into.",
+        Action: "Action",
+        sub1: "Welcome to the world of endless adrenaline and breathtaking events! Epic battles, dangerous chases, and heart-stopping stunts will keep you on the edge of your seat. Every moment is a new adventure!",
+        Comedy: "Comedy",
+        Drama: "Drama",
+        sub3:"Animation is a genre that brings imagination to life and opens the door to magical worlds. It can be fun and lighthearted or emotional and profound. Animated films are for all ages, using visuals and motion to tell beautiful, unforgettable stories.",        Horror: "Horror",
+        SciFi: "Sci-Fi",
+        Romance: "Romance",
+        Thriller: "Thriller",
+        Adventure: "Adventure",
+        Animation: "Animation",
+        Categories: "Categories",
+        Posters: "Posters",
+        businessmen: "Businessmen",
+        Reviews: "Reviews",
+        Search: "Search Movies",
+        Login: "Login",
+        question: "Do you have any questions? Write to us",
+        footer: "© 2024 VivaCine by Alibek Onege.",
+        LaCasaDePapel: "La Casa de Papel",
+    Movie2: "Pirates of the Caribbean",
+    PiratesOfTheCaribbean: "Pirates of the Caribbean",
+    Movie3: "Movie 3",
+    Leon: "Leon",
+    Movie4: "Movie 4",
+    SlovoPatsana: "A Man's Word",
+    Movie5: "Fast and Furious",
+    Movie6: "Ocean's 8",
+    Movie7: "Oppenheimer",
+    Movie8: "Titanic",
+    Movie9: "Home Alone",
+    Movie10: "Insidious",
+    Movie11: "Interstellar",
+        Racketeer:"Racketeer",
+    Movie12: "Avatar: The Last Airbender",
+    BoysOverFlowers: "Boys Over Flowers",
+    Twilight: "Twilight",
+    WinxClub: "Winx Club"
+    },
+    ru: {
+        home: "Главная",
+        Genres: "Жанры",
+        sub: "Выберите жанры, которые вам по душе. Ниже представлен наш полный список жанров, где каждый найдет что-то для себя. Любите ли вы захватывающие приключения, трогательные драмы или веселые комедии — вас ждут фильмы на любой вкус.",
+        Action: "Боевик",
+        sub1: "Добро пожаловать в мир бесконечного адреналина и захватывающих событий! Грандиозные битвы, опасные погони и головокружительные трюки не дадут вам заскучать. Каждая минута – это новый взрыв эмоций!",
+        Comedy: "Комедия",
+        Drama: "Драма",
+        businessmen: "Бизнесмены",
+        sub3:"Анимация / Мультфильм — это жанр, который оживляет воображение и открывает двери в фантастические миры. Он может быть как весёлым и добрым, так и трогательным и глубоким. Анимационные фильмы подходят для зрителей любого возраста и рассказывают удивительные истории через рисунки, графику и магию движения.",
+        Horror: "Ужасы",
+        SciFi: "Фантастика",
+        Romance: "Романтика",
+        Thriller: "Триллер",
+        Adventure: "Приключения",
+        Animation: "Мультфильм",
+        Categories: "Категории",
+        Posters: "Постеры",
+        Reviews: "Отзывы",
+        Search: "Поиск фильмов",
+        Login: "Войти",
+        question: "Есть вопросы? Напишите нам",
+        footer: "© 2024 VivaCine, автор: Алибек Онеге.",
+        LaCasaDePapel: "Бумажный дом",
+    Movie2: "Пираты Карибского моря",
+    PiratesOfTheCaribbean: "Пираты Карибского моря",
+    Movie3: "Фильм 3",
+    Leon: "Леон",
+    Movie4: "Фильм 4",
+    SlovoPatsana: "Слово пацана",
+    Movie5: "Форсаж",
+    Movie6: "8 подруг Оушена",
+    Movie7: "Оппенгеймер",
+    Movie8: "Титаник",
+    Movie9: "Один дома",
+    Movie10: "Астрал",
+    Movie11: "Интерстеллар",
+    Movie12: "Аватар: Легенда об Аанге",
+    BoysOverFlowers: "Мальчики краше цветов",
+    Twilight: "Сумерки",
+        Racketeer:"Рэкетир",
+    WinxClub: "Клуб Винкс"
+    },
+    kz: {
+        home: "Басты бет",
+        businessmen: "Бизнесмендер",
+        Genres: "Жанрлар",
+        sub: "Өзіңізге жақын жанрларды таңдап, кино әлеміне саяхат жасаңыз. Төменде біз ұсынған жанрлардың алуан түрлілігімен танысып, өзіңізге ұнайтын туындыларды табыңыз. Шексіз шытырман оқиғалар, жүректі тебірентер драмалар немесе күлкі сыйлайтын комедиялар — барлығы сіз үшін!",
+        Action: "Экшн",
+        sub1: "Шексіз адреналин мен қарқынды оқиғалар әлеміне қош келдіңіз! Керемет шайқастар, қауіпті қудалаулар мен жүрек тоқтатарлық көріністер сізді бей-жай қалдырмайды. Әрбір сәт – жаңа шытырман оқиға!",
+        Comedy: "Комедия",
+        Drama: "Драма",
+sub3:"Анимация / Мультфильм — бұл қиялды шындыққа айналдыратын және ғажайып әлемдердің есігін ашатын жанр. Ол күлкілі әрі мейірімді, кейде терең мағыналы әрі әсерлі болуы мүмкін. Анимациялық фильмдер кез келген жастағы көрермендерге арналған және суреттер мен қимыл арқылы ерекше оқиғаларды баяндайды.",
+        Horror: "Қорқынышты",
+        SciFi: "Ғылыми фантастика",
+        Romance: "Мелодрама",
+        Thriller: "Триллер",
+        Adventure: "Шытырман оқиғалар",
+        Animation: "Анимация",
+        Categories: "Категориялар",
+        Posters: "Постерлер",
+        Reviews: "Пікірлер",
+        Search: "Фильм іздеу",
+        Login: "Кіру",
+        Racketeer:"Рэкетир",
+        question: "Сұрақтарыңыз бар ма? Бізге жазыңыз",
+        footer: "© 2024 VivaCine, авторы: Әлібек Өнеге.",
+        LaCasaDePapel: "Қағаз үй",
+    Movie2: "Кариб теңізінің қарақшылары",
+    PiratesOfTheCaribbean: "Кариб теңізінің қарақшылары",
+    Movie3: "Фильм 3",
+    Leon: "Леон",
+    Movie4: "Фильм 4",
+    SlovoPatsana: "Жігіт сөзі",
+    Movie5: "Форсаж",
+    Movie6: "Оушеннің 8 құрбысы",
+    Movie7: "Оппенгеймер",
+    Movie8: "Титаник",
+    Movie9: "Үйде жалғыз",
+    Movie10: "Астрал",
+    Movie11: "Интерстеллар",
+    Movie12: "Аватар: Соңғы әуе билеушісі",
+    BoysOverFlowers: "Гүлдерден әдемі жігіттер",
+    Twilight: "Ымырт",
+    WinxClub: "Винкс клубы"
+    }
+};
+
+
+function changeLanguage(lang) {
+    localStorage.setItem('lang', lang); // Сохраняем выбранный язык
+    applyTranslations(lang);           // Применяем переводы
+}
+
+
+function applyTranslations(lang) {
+    // Находим все элементы с атрибутом data-translate
+    const elements = document.querySelectorAll('[data-translate]');
+    elements.forEach(el => {
+        // Получаем ключ для перевода
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+            // Применяем перевод, если ключ существует
+            el.textContent = translations[lang][key];
+        }
+    });
+}
+
+// Устанавливаем язык при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('lang') || 'kz'; // Язык по умолчанию: казахский
+    applyTranslations(savedLang);
+});
+    </script>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="mobile-menu-toggle" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="{{ url_for('index') }}" data-translate="home">Главная</a></li>
+      <li><a href="{{ url_for('genres') }}" data-translate="Genres">Жанры</a></li>
+      <li><a href="{{ url_for('categories') }}" data-translate="Categories">Категории</a></li>
+      <li><a href="{{ url_for('library') }}" data-translate="Posters">Постеры</a></li>
+      <li><a href="{{ url_for('search') }}" data-translate="Search">Поиск фильмов</a></li>
+
+      <li class="language-buttons">
+        <button class="lang-selector" onclick="changeLanguage('en')">EN</button>
+        <button class="lang-selector" onclick="changeLanguage('ru')">RU</button>
+        <button class="lang-selector" onclick="changeLanguage('kz')">KZ</button>
+      </li>
+
+      {% if session.get('user_id') %}
+        <li><a href="{{ url_for('profile') }}">{{ session.get('username') }}</a></li>
+      {% else %}
+        <li><a href="{{ url_for('login') }}" data-translate="Login">Login</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+</header>
+
+<main>
+     <section class="genre-catalog">
+        <h2 data-translate="Animation">Animation</h2>
+                        <p class="subtitle" data-translate="sub3">Animation is a genre that brings imagination to life and opens the door to magical worlds. It can be fun and lighthearted or emotional and profound. Animated films are for all ages, using visuals and motion to tell beautiful, unforgettable stories.</p>
+        <div class="genre-grid"> <!-- Все карточки внутри одного контейнера -->
+
+ <div class="genre-card">
+                 <a href="/Winx" class="card">
+                <img src="https://i.pinimg.com/originals/b4/03/43/b403431b46b74f96503895738a1ff7c1.gif"alt="Comedy">
+                <h3 data-translate="WinxClub">Winx Club</h3>
+            </a>
+        </div>
+
+            <div class="genre-card">
+            <a href="/avatar" class="card">
+                <img src="https://i.pinimg.com/originals/d3/bd/4a/d3bd4a677bd370e1d720a2d7d3fbcce5.gif" alt="Sci-Fi">
+                <h3 data-translate="Movie12">Avatar: The Last Airbender</h3>
+            </a>
+        </div>
+
+        </div>
+    </section>
+    <script src="translations.js"></script>
+<script src="main.js"></script>
+</main>
+<footer>
+    <div class="footer-content">
+
+        <div class="social-media">
+            <a href="https://www.facebook.com/?locale=ru_RU" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="https://x.com/?lang=ru" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+    <div class="footer-buttons">
+        <a href="/chat" class="contact-button" data-translate="question" >Do you have any questions? Write to us</a>
+    </div>
+    <div class="footer-bottom">
+        <p data-translate="footer">&copy; 2024 VivaCine by Alibek Onege.</p>
+    </div>
+</footer>
+<style>
+    footer {
+        background-color: #000;
+        color: #fff;
+        padding: 30px 0;
+        font-family: 'Arial', sans-serif;
+        text-align: center; /* Center the footer content */
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center; /* Center the content */
+        align-items: center;
+        margin-bottom: 20px;
+        flex-direction: column; /* Stack elements vertically */
+    }
+
+    .contacts p {
+        margin: 10px 0;
+        font-size: 15px;
+        font-weight: normal; /* Make the text normal weight */
+        pointer-events: none; /* Prevent text from being clickable */
+    }
+
+    .social-media {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .social-icon {
+        color: #fff;
+        font-size: 40px;
+        transition: color 0.3s ease;
+    }
+
+    .social-icon:hover {
+        color: #ff8c00; /* Hover color */
+    }
+
+    .footer-buttons {
+        margin-top: 20px;
+    }
+
+    .contact-button {
+        background-color: #020202;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .contact-button:hover {
+        background-color: #020202;
+        transform: scale(1.1);
+    }
+
+    .footer-bottom {
+        font-size: 14px;
+        opacity: 0.7;
+        margin-top: 20px;
+    }
+</style>
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById('navLinks');
+    menu.classList.toggle('show');
+  }
+</script>
+
+</body>
+</html>
+
+
+

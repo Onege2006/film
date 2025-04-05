@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="FastAndFurious" >Fast and furious</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .top-bar a, .top-bar button {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back-home {
+            background-color: #4a320d;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-back-home:hover {
+            background-color: #7e612c;
+        }
+
+        .control-btn {
+            background: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+        }
+
+        #gif-container {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            height: 70vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gif {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        .gif.active {
+            display: block;
+        }
+
+        .content {
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        h1, h2 {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #000000;
+        }
+     </style>
+
+   <script>
+    const translations = {
+
+        en: {
+            home: "Home",
+    genres: "Genres",
+    soundtrack: "Soundtrack ♬",
+    FastAndFurious: "Fast & Furious",
+    description: "Fast & Furious is a legendary franchise about speed, family, and the limitless possibilities of cars. Starting with street racing, the story has evolved into grand heists, international operations, and saving the world. Dominic Toretto and his crew are not just racers; they are a true family, ready to do anything for each other. Thrilling stunts, powerful cars, and loyalty to their principles have made 'Fast & Furious' one of the most popular movie series in cinema history.",
+    details: "Details:",
+    yearOfProduction: "Year of Production: 2001-2023",
+    platform: "Platform: Netflix, Prime Video, Apple TV",
+    country: "Country: USA 🇺🇸",
+    genre: "Genre: Action, Thriller, Crime",
+    tagline: "Tagline: Live life a quarter mile at a time.",
+    worldPremiere: "World Premiere: June 22, 2001",
+    digitalRelease: "Digital Release: Available on various platforms",
+    ageRating: "Age Rating: 12+ / 16+ (depending on the movie)",
+    episodeLength: "Movie Length: from 1h 47min to 2h 30min",
+    officialWebsite: "Official Website",
+        movie1: "The Fast and the Furious (2001)",
+        movie2: "2 Fast 2 Furious (2003)",
+        movie3: "The Fast and the Furious: Tokyo Drift (2006)",
+        movie4: "Fast & Furious (2009)",
+        movie5: "Fast Five (2011)",
+        movie6: "Fast & Furious 6 (2013)",
+        movie7: "Furious 7 (2015)",
+        movie8: "The Fate of the Furious (2017)",
+        movie9: "Fast & Furious Presents: Hobbs & Shaw (2019)",
+        movie10: "F9: The Fast Saga (2021)",
+        movie11: "Fast X (2023)",
+        movie12: "Fast & Furious 11 (2025) (Upcoming)",
+    contactUs: "Got Questions? Contact Us",
+            copyright: "© 2024 VivaCine by Alibek Onege."
+        },
+        ru: {
+            home: "Главная",
+    genres: "Жанры",
+    soundtrack: "Саундтрек ♬",
+    FastAndFurious: "Форсаж",
+    description: "Форсаж — это культовая франшиза о скорости, семье и безграничных возможностях автомобилей. Начавшись с уличных гонок, история развилась в масштабные ограбления, международные спецоперации и спасение мира. Доминик Торетто и его команда — это не просто гонщики, а настоящая семья, готовая на всё ради друг друга. Захватывающие трюки, мощные машины и верность своим принципам сделали 'Форсаж' одной из самых популярных серий фильмов в истории кино.",
+    details: "Детали:",
+    yearOfProduction: "Год производства: 2001-2023",
+    platform: "Платформа: Netflix, Prime Video, Apple TV",
+    country: "Страна: США 🇺🇸",
+    genre: "Жанр: Боевик, Триллер, Криминал",
+    tagline: "Девиз: Живи на скорости.",
+    worldPremiere: "Мировая премьера: 22 июня 2001",
+    digitalRelease: "Цифровой релиз: Доступен на различных платформах",
+    ageRating: "Возрастной рейтинг: 12+ / 16+ (в зависимости от части)",
+    episodeLength: "Продолжительность фильма: от 1 ч 47 мин до 2 ч 30 мин",
+    officialWebsite: "Официальный сайт",
+        movie1: "Форсаж (2001)",
+        movie2: "Двойной Форсаж (2003)",
+        movie3: "Форсаж: Токийский дрифт (2006)",
+        movie4: "Форсаж: Бандиты (2009)",
+        movie5: "Форсаж 5 (2011)",
+        movie6: "Форсаж 6 (2013)",
+        movie7: "Форсаж 7 (2015)",
+        movie8: "Форсаж 8 (2017)",
+        movie9: "Форсаж: Хоббс и Шоу (2019)",
+        movie10: "Форсаж 9 (2021)",
+        movie11: "Форсаж 10 (2023)",
+        movie12: "Форсаж 11 (2025) (Ожидается)",
+    contactUs: "Есть вопросы? Напишите нам",
+    copyright: "© 2024 VivaCine, автор: Алибек Онеге."
+        },
+         kz: {
+     home: "Басты бет",
+    genres: "Жанрлар",
+    soundtrack: "Саундтрек ♬",
+    FastAndFurious: "Форсаж",
+    description: "Форсаж — бұл жылдамдық, отбасы және автомобильдердің шексіз мүмкіндіктері туралы аңызға айналған франшиза. Көшедегі жарыстардан басталып, оқиға үлкен ұрлықтар, халықаралық операциялар және әлемді құтқаруға дейін дамыды. Доминик Торетто мен оның тобы тек жарысушылар емес, олар нағыз отбасы, бір-бірі үшін бәріне дайын. Қызықты трюктер, қуатты көліктер және өздерінің принциптеріне адалдық 'Форсажды' кино тарихындағы ең танымал фильмдер серияларының біріне айналдырды.",
+    details: "Детальдар:",
+    yearOfProduction: "Өндіріс жылы: 2001-2023",
+    platform: "Платформа: Netflix, Prime Video, Apple TV",
+    country: "Ел: АҚШ 🇺🇸",
+    genre: "Жанр: Экшн, Триллер, Қылмыс",
+    tagline: "Ұран: Өмірді тоқтаусыз жылдамдықта өткіз.",
+    worldPremiere: "Дүниежүзілік премьера: 22 маусым 2001",
+    digitalRelease: "Цифрлық шығарылым: Әртүрлі платформаларда қолжетімді",
+    ageRating: "Жас санаты: 12+ / 16+ (фильмге байланысты)",
+    episodeLength: "Фильм ұзақтығы: 1 сағат 47 минуттан 2 сағат 30 минутқа дейін",
+    officialWebsite: "Ресми сайт",
+        movie1: "Форсаж (2001)",
+        movie2: "Екілік Форсаж (2003)",
+        movie3: "Форсаж: Токиалық дрифт (2006)",
+        movie4: "Форсаж 4 (2009)",
+        movie5: "Форсаж 5 (2011)",
+        movie6: "Форсаж 6 (2013)",
+        movie7: "Форсаж 7 (2015)",
+        movie8: "Форсаж 8 (2017)",
+        movie9: "Форсаж: Хоббс пен Шоу (2019)",
+        movie10: "Форсаж 9 (2021)",
+        movie11: "Форсаж 10 (2023)",
+        movie12: "Форсаж 11 (2025) (Күтілуде)",
+    contactUs: "Сұрақтарыңыз бар ма? Бізге жазыңыз",
+    copyright: "© 2024 VivaCine, авторы: Әлібек Өнеге."
+    }
+        };
+
+
+function changeLanguage(lang) {
+    localStorage.setItem('lang', lang); // Сохраняем выбранный язык
+    applyTranslations(lang);           // Применяем переводы
+}
+
+
+function applyTranslations(lang) {
+    // Находим все элементы с атрибутом data-translate
+    const elements = document.querySelectorAll('[data-translate]');
+    elements.forEach(el => {
+        // Получаем ключ для перевода
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+            // Применяем перевод, если ключ существует
+            el.textContent = translations[lang][key];
+        }
+    });
+}
+
+// Устанавливаем язык при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('lang') || 'kz'; // Язык по умолчанию: казахский
+    applyTranslations(savedLang);
+});
+    </script>
+</head>
+<body>
+
+
+<div class="top-bar">
+    <a href="{{ url_for('index') }}" class="btn-back-home" data-translate="home">Home</a>
+    <a href="{{ url_for('genres') }}" class="btn-back-home" data-translate="genres">Genres</a>
+    <button class="control-btn" onclick="togglePlay()" data-translate="soundtrack">Soundtrack ♬</button>
+</div>
+<!-- Контейнер для GIF'ов -->
+    <div id="gif-container">
+        <img class="gif" src=" https://i.pinimg.com/originals/1e/1b/e4/1e1be428af6451f0dcd8724610c616ac.gif" alt="La Casa de Papel" />
+        <img class="gif" src=" https://i.pinimg.com/originals/4a/59/57/4a595736a9ed9958947bbf2fba0b93ca.gif" alt="La Casa de Papel 2" />
+        <img class="gif" src="https://i.pinimg.com/originals/f9/ae/20/f9ae208fcd4718f84f9aa4d44aeffb2f.gif" alt="La Casa de Papel 3" />
+        <img class="gif" src="https://i.pinimg.com/originals/c7/56/65/c75665eefef320fc3e3e40f69040583d.gif" alt="La Casa de Papel 4" />
+        <img class="gif" src="https://i.pinimg.com/originals/0e/7f/f2/0e7ff2d4a18bb4a5acb3e89e36a44ae1.gif" alt="La Casa de Papel 5" />
+    </div>
+    <div class="content">
+        <header>
+            <h1 data-translate="FastAndFurious">Fast & Furious</h1>
+        </header>
+
+        <section>
+            <p data-translate="description">Pirates of the Caribbean is a mesmerizing saga of the sea, freedom, and mysticism, where the fates of daring adventurers intertwine with legends. The cunning and resourceful **Captain Jack Sparrow** finds himself at the heart of a battle for ships, treasures, and immortality. Love, betrayal, curses, and naval battles drive the heroes through the storms of time, turning each adventure into a legend. Here, the line between myth and reality blurs, and the waves whisper secrets of the past.</p>
+        </section>
+
+       <section class="details">
+    <h2 data-translate="details"> Details:</h2>
+    <ul>
+    <li data-translate="yearOfProduction">Year of Production: 2001-2023</li>
+    <li data-translate="platform">Platform: Netflix, Prime Video, Apple TV</li>
+    <li data-translate="country">Country: USA 🇺🇸</li>
+    <li data-translate="genre">Genre: Action, Thriller, Crime</li>
+    <li data-translate="tagline">Tagline: Live life a quarter mile at a time.</li>
+    <li data-translate="worldPremiere">World Premiere: June 22, 2001 </li>
+    <li data-translate="digitalRelease">Digital Release: Available on various platforms</li>
+    <li data-translate="ageRating">Age Rating: 12+ / 16+ (depending on the movie)</li>
+    <li data-translate="episodeLength">Movie Length: from 1h 47min to 2h 30minEpisode Length: 2 hours 23 minutes</li>
+</ul>
+
+
+ <div class="video-container">
+    <p class="video-title" data-translate="movie1">
+    </p>
+    <iframe src="https://drive.google.com/file/d/1A3o1QOXrYb-adwRp0snzPKrvN5lTMlXY/preview" width="900" height="500" allow="autoplay; fullscreen" allowfullscreen></iframe>
+</div>
+       <div class="video-container">
+    <p class="video-title" data-translate="movie2">
+    </p>
+    <iframe src="https://drive.google.com/file/d/1ghYu-TFeQfwsnQU4TAPwWwdZNt2g_KOx/preview" width="900" height="500" allow="autoplay; fullscreen" allowfullscreen></iframe>
+</div>
+
+
+</section>
+    </div>
+
+    <footer>
+    <div class="footer-content">
+
+        <div class="social-media">
+            <a href="https://www.facebook.com/?locale=ru_RU" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="https://x.com/?lang=ru" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+    <div class="footer-buttons">
+        <a href="/chat" class="contact-button" data-translate="contactUs" >Do you have any questions? Write to us</a>
+    </div>
+    <div class="footer-bottom">
+        <p data-translate="copyright">&copy; 2024 VivaCine by Alibek Onege.</p>
+    </div>
+</footer>
+<style>
+    footer {
+        background-color: #000;
+        color: #fff;
+        padding: 30px 0;
+        font-family: 'Arial', sans-serif;
+        text-align: center; /* Center the footer content */
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center; /* Center the content */
+        align-items: center;
+        margin-bottom: 20px;
+        flex-direction: column; /* Stack elements vertically */
+    }
+
+    .contacts p {
+        margin: 10px 0;
+        font-size: 15px;
+        font-weight: normal; /* Make the text normal weight */
+        pointer-events: none; /* Prevent text from being clickable */
+    }
+
+    .social-media {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .social-icon {
+        color: #fff;
+        font-size: 40px;
+        transition: color 0.3s ease;
+    }
+
+    .social-icon:hover {
+        color: #ff8c00; /* Hover color */
+    }
+
+    .footer-buttons {
+        margin-top: 20px;
+    }
+
+    .contact-button {
+        background-color: #020202;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .contact-button:hover {
+        background-color: #020202;
+        transform: scale(1.1);
+    }
+
+    .footer-bottom {
+        font-size: 14px;
+        opacity: 0.7;
+        margin-top: 20px;
+    }
+</style>
+
+<!-- Встроенный YouTube аудио -->
+    <iframe id="audio" width="1" height="1" src="https://www.youtube.com/embed/iuJDhFRDx9M?autoplay=1&mute=0&enablejsapi=1"
+        title="YouTube audio player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+    </iframe>
+
+    <script>
+        let player;
+
+        // Инициализация YouTube Player API
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('audio', {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // Когда плеер готов
+        function onPlayerReady(event) {
+            console.log('Player Ready');
+        }
+
+        // Когда состояние плеера изменяется
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                console.log("Воспроизведение");
+            }
+            if (event.data === YT.PlayerState.PAUSED) {
+                console.log("Пауза");
+            }
+        }
+
+        // Функция для воспроизведения/паузы
+        function togglePlay() {
+            if (player) {
+                if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+                    player.pauseVideo();
+                } else {
+                    player.playVideo();
+                }
+            }
+        }
+
+        // Загружаем API YouTube
+        var script = document.createElement('script');
+        script.src = "https://www.youtube.com/iframe_api";
+        document.body.appendChild(script);
+
+        // Автозапуск GIF
+        const gifs = document.querySelectorAll('.gif');
+        let currentGifIndex = 0;
+
+        function showNextGif() {
+            gifs[currentGifIndex].classList.remove('active'); // Убираем активный класс с текущего GIF
+            currentGifIndex = (currentGifIndex + 1) % gifs.length; // Переходим к следующему GIF
+            gifs[currentGifIndex].classList.add('active'); // Добавляем активный класс к следующему GIF
+        }
+
+        gifs[currentGifIndex].classList.add('active'); // Делаем первый GIF активным
+        setInterval(showNextGif, 3000); // Переключаем GIF каждые 3 секунды
+    </script>
+</body>
+</html>
+
+

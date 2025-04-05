@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="winxClub" >Winx Club</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .top-bar a, .top-bar button {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back-home {
+            background-color: #4a320d;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-back-home:hover {
+            background-color: #7e612c;
+        }
+
+        .control-btn {
+            background: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+        }
+
+        #gif-container {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            height: 70vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gif {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        .gif.active {
+            display: block;
+        }
+
+        .content {
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        h1, h2 {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #000000;
+        }
+     </style>
+
+   <script>
+    const translations = {
+
+    en: {
+  home: "Home",
+  genres: "Genres",
+  soundtrack: "Soundtrack ♬",
+  winxClub: "Winx Club",
+  description: "When Bloom discovers she has magical powers, she joins Alfea, a school for fairies in the Magical Dimension. Alongside her new friends — the Winx — she learns to harness her powers, face dark enemies, and uncover the truth about her past. Together, they protect the realms from evil and celebrate the power of friendship and magic.",
+  details: "Details:",
+  yearOfProduction: "Year of Production: 2004",
+  platform: "Platform: Rainbow S.p.A., Nickelodeon",
+  country: "Country: Italy 🇮🇹",
+  genre: "Genre: Animation, Fantasy, Adventure",
+  tagline: 'Tagline: "The magic is in you."',
+  worldPremiere: "World Premiere: January 28, 2004",
+  digitalRelease: "Digital Release: Varies by region",
+  ageRating: "Age Rating: 6+",
+  episodeLength: "Runtime: 22 minutes per episode",
+  officialWebsite: "Official Website",
+  contactUs: "Do you have any questions? Write to us",
+  likes: "Likes",
+  copyright: "© 2024 VivaCine by Alibek Onege."
+},
+
+ru: {
+  home: "Главная",
+  genres: "Жанры",
+  soundtrack: "Саундтрек ♬",
+  winxClub: "Клуб Винкс",
+  description: "Когда Блум обнаруживает у себя волшебные способности, она поступает в Алфею — школу для фей в Магическом Измерении. Вместе с подругами — Винкс — она учится управлять своей силой, сражается с темными силами и узнаёт тайны своего прошлого. Девочки защищают миры от зла и показывают, что сила — в дружбе и магии.",
+  details: "Детали:",
+  yearOfProduction: "Год производства: 2004",
+  platform: "Платформа: Rainbow S.p.A., Nickelodeon",
+  country: "Страна: Италия 🇮🇹",
+  genre: "Жанр: Анимация, Фэнтези, Приключения",
+  tagline: 'Девиз: "Магия внутри тебя."',
+  worldPremiere: "Мировая премьера: 28 января 2004 года",
+  digitalRelease: "Цифровой релиз: зависит от региона",
+  ageRating: "Возрастной рейтинг: 6+",
+  episodeLength: "Продолжительность: 22 минуты (серия)",
+  officialWebsite: "Официальный сайт",
+  contactUs: "Есть вопросы? Напишите нам",
+  likes: "Лайков",
+  copyright: "© 2024 VivaCine, автор: Алибек Онеге."
+},
+
+kz: {
+  home: "Басты бет",
+  genres: "Жанрлар",
+  soundtrack: "Саундтрек ♬",
+  winxClub: "Винкс клубы",
+  description: "Блум сиқырлы күштерге ие екенін білгенде, ол Сиқырлы Өлшемдегі феялар мектебі — Алфеяға түседі. Жаңа достарымен — Винкспен — бірге ол өз күшін игеруді, зұлымдықпен күресуді және өткеннің құпияларын ашуды үйренеді. Олар әлемдерді зұлымдықтан қорғайды және достық пен сиқырдың күшімен бәріне үлгі болады.",
+  details: "Мазмұны:",
+  yearOfProduction: "Өндіріс жылы: 2004",
+  platform: "Платформа: Rainbow S.p.A., Nickelodeon",
+  country: "Ел: Италия 🇮🇹",
+  genre: "Жанр: Анимация, Фэнтези, Шабытты оқиғалар",
+  tagline: 'Таңдаулы сөйлем: "Сиқыр — сенің ішіңде."',
+  worldPremiere: "Дүниежүзілік премьера: 2004 жылдың 28 қаңтары",
+  digitalRelease: "Цифрлық релиз: аймаққа байланысты өзгереді",
+  ageRating: "Жас шектеуі: 6+",
+  episodeLength: "Ұзақтығы: 22 минут (әр бөлім)",
+  officialWebsite: "Ресми сайт",
+  contactUs: "Сұрақтарыңыз бар ма? Бізге жазыңыз",
+  likes: "Ұнатулар",
+  copyright: "© 2024 VivaCine, авторы: Әлібек Өнеге."
+}
+
+        };
+
+
+function changeLanguage(lang) {
+    localStorage.setItem('lang', lang); // Сохраняем выбранный язык
+    applyTranslations(lang);           // Применяем переводы
+}
+
+
+function applyTranslations(lang) {
+    // Находим все элементы с атрибутом data-translate
+    const elements = document.querySelectorAll('[data-translate]');
+    elements.forEach(el => {
+        // Получаем ключ для перевода
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+            // Применяем перевод, если ключ существует
+            el.textContent = translations[lang][key];
+        }
+    });
+}
+
+// Устанавливаем язык при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('lang') || 'kz'; // Язык по умолчанию: казахский
+    applyTranslations(savedLang);
+});
+    </script>
+</head>
+<body>
+
+
+<div class="top-bar">
+    <a href="{{ url_for('index') }}" class="btn-back-home" data-translate="home">Home</a>
+    <a href="{{ url_for('genres') }}" class="btn-back-home" data-translate="genres">Genres</a>
+    <button class="control-btn" onclick="togglePlay()" data-translate="soundtrack">Soundtrack ♬</button>
+</div>
+
+<!-- Контейнер для GIF'ов -->
+<div id="gif-container">
+    <img class="gif" src="https://i.pinimg.com/originals/7d/00/e7/7d00e7780e5fff03a024410e597e4ac9.gif" alt="La Casa de Papel" />
+    <img class="gif" src="https://i.pinimg.com/originals/aa/8f/61/aa8f616a53f02893ae6bbf0c55e3b360.gif" alt="La Casa de Papel 2" />
+    <img class="gif" src="https://i.pinimg.com/originals/79/fe/1a/79fe1a3a4c6cbe87131204eceabc4f07.gif" alt="La Casa de Papel 3" />
+    <img class="gif" src="https://i.pinimg.com/originals/8e/be/ff/8ebeff32d3bec536b6c2e9d4342c83e6.gif" alt="La Casa de Papel 4" />
+    <img class="gif" src="https://i.pinimg.com/originals/0c/42/f4/0c42f4645d3e6c5c2d31b1e58530d7ca.gif" alt="La Casa de Papel 5" />
+</div>
+
+
+
+    <div class="content">
+        <header>
+            <h1 data-translate="winxClub">Winx Club</h1>
+        </header>
+
+        <section>
+            <p data-translate="description">
+When Bloom discovers she has magical powers, she joins Alfea, a school for fairies in the Magical Dimension. Alongside her new friends — the Winx — she learns to harness her powers, face dark enemies, and uncover the truth about her past. Together, they protect the realms from evil and celebrate the power of friendship and magic.
+        </section>
+       <section class="details">
+    <h2 data-translate="details"> Details:</h2>
+    <ul>
+    <li data-translate="yearOfProduction">Year of Production: 2004</li>
+    <li data-translate="platform">Platform: Rainbow S.p.A., Nickelodeon</li>
+    <li data-translate="country">Country: Italy 🇮🇹</li>
+    <li data-translate="genre">Genre: Animation, Fantasy, Adventure</li>
+    <li data-translate="tagline">Tagline: "The magic is in you." </li>
+    <li data-translate="worldPremiere">World Premiere: January 28, 2004 </li>
+    <li data-translate="digitalRelease">Digital Release: Varies by region</li>
+    <li data-translate="ageRating">Age Rating: 6+</li>
+    <li data-translate="episodeLength">Runtime: 22 minutes per episode</li>
+</ul>
+
+
+<div class="video-container">
+  <p class="video-title" data-translate="season1Episode1">Season 1, Episode 1</p>
+  <iframe
+    src="https://drive.google.com/file/d/1ZhMA24p4kG91bOO0cKaYpTNVI9CZ5Nb6/preview"
+    width="900"
+    height="500"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
+
+<div class="video-container">
+  <p class="video-title" data-translate="season1Episode2">Season 1, Episode 2</p>
+  <iframe
+    src="https://drive.google.com/file/d/1xkatQ0S8XupG7EUpbYvy3nrM-N-5coXV/preview"
+    width="900"
+    height="500"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
+
+
+<div class="video-container">
+  <p class="video-title" data-translate="season1Episode3">Season 1, Episode 3</p>
+  <iframe
+    src="https://drive.google.com/file/d/1u74qv3FAwIFfmcT3uc_FbpRlse8WOFpz/preview"
+    width="900"
+    height="500"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
+
+<div class="video-container">
+  <p class="video-title" data-translate="season1Episode4">Season 1, Episode 4</p>
+  <iframe
+    src="https://drive.google.com/file/d/1CrDIcGBzE7W1sndSSJ8G9TttlAhKv72s/preview"
+    width="900"
+    height="500"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
+
+          <div class="video-container">
+  <p class="video-title" data-translate="season1Episode5">Season 1, Episode 5</p>
+  <iframe
+    src="https://drive.google.com/file/d/1CrDIcGBzE7W1sndSSJ8G9TttlAhKv72s/preview"
+    width="900"
+    height="500"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
+
+           <div class="video-container">
+  <p class="video-title" data-translate="season1Episodes7-8-9">Season 1, Episodes 7-8-9</p>
+  <iframe
+    src="https://drive.google.com/file/d/10iiyd68nq_dcPb7Vk5h5WFWWJ050b7s1/preview"
+    width="900"
+    height="500"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
+
+
+         <div class="video-container">
+  <p class="video-title" data-translate="season1Episodes10-11-12">Season 1, Episodes 10-11-12</p>
+  <iframe
+    src="https://drive.google.com/file/d/1DX_QQ9EvTwfkM--UfuhnalEREEMpcInp/preview"
+    width="900"
+    height="500"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
+
+
+
+
+
+</section>
+    </div>
+
+    <footer>
+    <div class="footer-content">
+
+        <div class="social-media">
+            <a href="https://www.facebook.com/?locale=ru_RU" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="https://x.com/?lang=ru" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+    <div class="footer-buttons">
+        <a href="/chat" class="contact-button" data-translate="contactUs" >Do you have any questions? Write to us</a>
+    </div>
+    <div class="footer-bottom">
+        <p data-translate="copyright">&copy; 2024 VivaCine by Alibek Onege.</p>
+    </div>
+</footer>
+<style>
+    footer {
+        background-color: #000;
+        color: #fff;
+        padding: 30px 0;
+        font-family: 'Arial', sans-serif;
+        text-align: center; /* Center the footer content */
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center; /* Center the content */
+        align-items: center;
+        margin-bottom: 20px;
+        flex-direction: column; /* Stack elements vertically */
+    }
+
+    .contacts p {
+        margin: 10px 0;
+        font-size: 15px;
+        font-weight: normal; /* Make the text normal weight */
+        pointer-events: none; /* Prevent text from being clickable */
+    }
+
+    .social-media {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .social-icon {
+        color: #fff;
+        font-size: 40px;
+        transition: color 0.3s ease;
+    }
+
+    .social-icon:hover {
+        color: #ff8c00; /* Hover color */
+    }
+
+    .footer-buttons {
+        margin-top: 20px;
+    }
+
+    .contact-button {
+        background-color: #020202;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .contact-button:hover {
+        background-color: #020202;
+        transform: scale(1.1);
+    }
+
+    .footer-bottom {
+        font-size: 14px;
+        opacity: 0.7;
+        margin-top: 20px;
+    }
+</style>
+<!-- Встроенный YouTube аудио -->
+ <iframe id="audio" width="0" height="0" src="https://www.youtube.com/embed/D6dK4q98buI?autoplay=1&enablejsapi=1" allow="autoplay" frameborder="0"></iframe>
+
+<script>
+    let player;
+    let isPlaying = false;
+
+    // Инициализация YouTube Player API
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('audio', {
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        console.log('Player Ready');
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+            isPlaying = true;
+        } else if (event.data === YT.PlayerState.PAUSED) {
+            isPlaying = false;
+        }
+    }
+
+    // Воспроизведение и пауза с сохранением позиции
+    function togglePlay() {
+        if (player) {
+            if (isPlaying) {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
+            }
+        }
+    }
+
+    // Загрузка API YouTube
+    const script = document.createElement('script');
+    script.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(script);
+
+    // Автозапуск GIF
+    const gifs = document.querySelectorAll('.gif');
+    let currentGifIndex = 0;
+
+    function showNextGif() {
+        gifs[currentGifIndex].classList.remove('active'); // Убираем активный класс с текущего GIF
+        currentGifIndex = (currentGifIndex + 1) % gifs.length; // Переходим к следующему GIF
+        gifs[currentGifIndex].classList.add('active'); // Добавляем активный класс к следующему GIF
+    }
+
+    gifs[currentGifIndex].classList.add('active'); // Делаем первый GIF активным
+    setInterval(showNextGif, 3000); // Переключаем GIF каждые 3 секунды
+</script>
+
+</body>
+</html>

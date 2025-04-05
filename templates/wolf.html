@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="Titanic" >Titanic</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .top-bar a, .top-bar button {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back-home {
+            background-color: #4a320d;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-back-home:hover {
+            background-color: #7e612c;
+        }
+
+        .control-btn {
+            background: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+        }
+
+        #gif-container {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            height: 70vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gif {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        .gif.active {
+            display: block;
+        }
+
+        .content {
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        h1, h2 {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #000000;
+        }
+     </style>
+
+   <script>
+    const translations = {
+
+        en: {
+    home: "Home",
+    genres: "Genres",
+    soundtrack: "Soundtrack ♬",
+    Titanic: "Titanic",
+    description: "Titanic is an epic drama by James Cameron, telling the tragic love story of Jack and Rose aboard the famous ship that sank in 1912. Their romance unfolds against the backdrop of a historical disaster that claimed thousands of lives. It's a story of love, loss, and the strength of the human spirit, where the fates of the characters intertwine with the real events of that era.",
+    details: "Details:",
+    yearOfProduction: "Year of Production: 1997",
+    platform: "Platform: Netflix, Prime Video, Apple TV",
+    country: "Country: USA 🇺🇸, Canada 🇨🇦",
+    genre: "Genre: Drama, Romance, History",
+    tagline: "Tagline: A love that was meant to be.",
+    worldPremiere: "World Premiere: December 19, 1997",
+    digitalRelease: "Digital Release: October 4, 2011",
+    ageRating: "Age Rating: 12+",
+    episodeLength: "Movie Length: 3h 14min",
+    officialWebsite: "Official Website",
+    movie: "Titanic (1997)",
+    contactUs: "Got Questions? Contact Us",
+    copyright: "© 2024 VivaCine, author: Alibek Onege."
+},
+        ru: {
+    home: "Главная",
+    genres: "Жанры",
+    soundtrack: "Саундтрек ♬",
+    Titanic: "Титаник",
+    description: "Титаник — эпическая драма Джеймса Кэмерона, рассказывающая о трагической истории любви Джек и Розы на борту знаменитого корабля, который затонул в 1912 году. Их роман разворачивается на фоне исторической катастрофы, которая унесла жизни тысяч людей. Это история о любви, утрате и силе человеческого духа, где судьбы героев переплетаются с реальными событиями той эпохи.",
+    details: "Детали:",
+    yearOfProduction: "Год производства: 1997",
+    platform: "Платформа: Netflix, Prime Video, Apple TV",
+    country: "Страна: США 🇺🇸, Канада 🇨🇦",
+    genre: "Жанр: Драма, Романтика, История",
+    tagline: "Девиз: Любовь, которая была вечной.",
+    worldPremiere: "Мировая премьера: 19 декабря 1997",
+    digitalRelease: "Цифровой релиз: 4 октября 2011",
+    ageRating: "Возрастной рейтинг: 12+",
+    episodeLength: "Продолжительность фильма: 3 ч 14 мин",
+    officialWebsite: "Официальный сайт",
+    movie: "Титаник (1997)",
+    contactUs: "Есть вопросы? Напишите нам",
+    copyright: "© 2024 VivaCine, автор: Алибек Онеге."
+},
+         kz: {
+   home: "Басты бет",
+    genres: "Жанрлар",
+    soundtrack: "Саундтрек ♬",
+    Titanic: "Титаник",
+    description: "Титаник — Джеймс Кэмеронның эпикалық драмасы, 1912 жылы батып кеткен әйгілі кеменің бортында Джек пен Розаның қайғылы махаббат тарихын баяндайды. Олардың романы сол кездегі тарихи апаттың фонында өрбиді, бұл апат мыңдаған адамның өмірін алып кетті. Бұл махаббат, жоғалту және адам рухының күші туралы әңгіме, онда кейіпкерлердің тағдыры сол дәуірдің нақты оқиғаларымен араласады.",
+    details: "Детальдар:",
+    yearOfProduction: "Өндіріс жылы: 1997",
+    platform: "Платформа: Netflix, Prime Video, Apple TV",
+    country: "Ел: АҚШ 🇺🇸, Канада 🇨🇦",
+    genre: "Жанр: Драма, Романтика, Тарих",
+    tagline: "Ұран: Махаббат, мәңгілік болуға тиісті.",
+    worldPremiere: "Дүниежүзілік премьера: 19 желтоқсан 1997",
+    digitalRelease: "Цифрлық шығарылым: 4 қазан 2011",
+    ageRating: "Жас санаты: 12+",
+    episodeLength: "Фильм ұзақтығы: 3 сағат 14 минут",
+    officialWebsite: "Ресми сайт",
+    movie: "Титаник (1997)",
+    contactUs: "Сұрақтарыңыз бар ма? Бізге жазыңыз",
+    copyright: "© 2024 VivaCine, авторы: Әлібек Өнеге."
+    }
+        };
+
+
+function changeLanguage(lang) {
+    localStorage.setItem('lang', lang); // Сохраняем выбранный язык
+    applyTranslations(lang);           // Применяем переводы
+}
+
+
+function applyTranslations(lang) {
+    // Находим все элементы с атрибутом data-translate
+    const elements = document.querySelectorAll('[data-translate]');
+    elements.forEach(el => {
+        // Получаем ключ для перевода
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+            // Применяем перевод, если ключ существует
+            el.textContent = translations[lang][key];
+        }
+    });
+}
+
+// Устанавливаем язык при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('lang') || 'kz'; // Язык по умолчанию: казахский
+    applyTranslations(savedLang);
+});
+    </script>
+</head>
+<body>
+
+
+<div class="top-bar">
+    <a href="{{ url_for('index') }}" class="btn-back-home" data-translate="home">Home</a>
+    <a href="{{ url_for('genres') }}" class="btn-back-home" data-translate="genres">Genres</a>
+    <button class="control-btn" onclick="togglePlay()" data-translate="soundtrack">Soundtrack ♬</button>
+</div>
+ <!-- Контейнер для GIF'ов -->
+    <div id="gif-container">
+        <img class="gif" src="https://i.pinimg.com/originals/50/8b/78/508b7897be9798ad85cae743dfef7f00.gif" alt="La Casa de Papel" />
+        <img class="gif" src="https://i.pinimg.com/originals/c2/99/cf/c299cf9092e1448ad621bed180bc9eee.gif" alt="La Casa de Papel 2" />
+        <img class="gif" src="https://i.gifer.com/4A9f.gif" alt="La Casa de Papel 3" />
+        <img class="gif" src="https://i.pinimg.com/originals/b5/4b/a7/b54ba73e2aa56f4a94cb1c641c2a27ac.gif" alt="La Casa de Papel 4" />
+        <img class="gif" src="https://cs13.pikabu.ru/post_img/2019/04/21/7/1555841813159556617.gif" alt="La Casa de Papel 5" />
+    </div>
+    <div class="content">
+        <header>
+            <h1 data-translate="Titanic">Titanic</h1>
+        </header>
+
+        <section>
+            <p data-translate="description">Pirates of the Caribbean is a mesmerizing saga of the sea, freedom, and mysticism, where the fates of daring adventurers intertwine with legends. The cunning and resourceful **Captain Jack Sparrow** finds himself at the heart of a battle for ships, treasures, and immortality. Love, betrayal, curses, and naval battles drive the heroes through the storms of time, turning each adventure into a legend. Here, the line between myth and reality blurs, and the waves whisper secrets of the past.</p>
+        </section>
+
+       <section class="details">
+    <h2 data-translate="details"> Details:</h2>
+    <ul>
+    <li data-translate="yearOfProduction">Year of Production: 2018</li>
+    <li data-translate="platform">Platform: Netflix, Prime Video, Apple TV</li>
+    <li data-translate="country">Country: USA 🇺🇸</li>
+    <li data-translate="genre">Genre: Comedy, Crime, Thriller</li>
+    <li data-translate="tagline">Tagline: "One woman more – one problem less"</li>
+    <li data-translate="worldPremiere">World Premiere: June 8, 2018 </li>
+    <li data-translate="digitalRelease">Digital Release: July 17, 2018</li>
+    <li data-translate="ageRating">Age Rating: 12+</li>
+    <li data-translate="episodeLength">Episode Length: 1h 50min</li>
+</ul>
+
+
+ <div class="video-container">
+    <p class="video-title" data-translate="season1Episode1">
+    </p>
+    <iframe src="https://drive.google.com/file/d/1SwC30Qp4xf3dBX0cHK57U8N_99kpUJ5-/preview" width="900" height="500" allow="autoplay; fullscreen" allowfullscreen></iframe>
+</div>
+
+
+
+</section>
+    </div>
+
+    <footer>
+    <div class="footer-content">
+
+        <div class="social-media">
+            <a href="https://www.facebook.com/?locale=ru_RU" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="https://x.com/?lang=ru" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+    <div class="footer-buttons">
+        <a href="/chat" class="contact-button" data-translate="contactUs" >Do you have any questions? Write to us</a>
+    </div>
+    <div class="footer-bottom">
+        <p data-translate="copyright">&copy; 2024 VivaCine by Alibek Onege.</p>
+    </div>
+</footer>
+<style>
+    footer {
+        background-color: #000;
+        color: #fff;
+        padding: 30px 0;
+        font-family: 'Arial', sans-serif;
+        text-align: center; /* Center the footer content */
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center; /* Center the content */
+        align-items: center;
+        margin-bottom: 20px;
+        flex-direction: column; /* Stack elements vertically */
+    }
+
+    .contacts p {
+        margin: 10px 0;
+        font-size: 15px;
+        font-weight: normal; /* Make the text normal weight */
+        pointer-events: none; /* Prevent text from being clickable */
+    }
+
+    .social-media {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .social-icon {
+        color: #fff;
+        font-size: 40px;
+        transition: color 0.3s ease;
+    }
+
+    .social-icon:hover {
+        color: #ff8c00; /* Hover color */
+    }
+
+    .footer-buttons {
+        margin-top: 20px;
+    }
+
+    .contact-button {
+        background-color: #020202;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .contact-button:hover {
+        background-color: #020202;
+        transform: scale(1.1);
+    }
+
+    .footer-bottom {
+        font-size: 14px;
+        opacity: 0.7;
+        margin-top: 20px;
+    }
+</style>
+<!-- Встроенный YouTube аудио -->
+ <iframe id="audio" width="0" height="0" src="https://www.youtube.com/embed/F2RnxZnubCM?autoplay=1&enablejsapi=1" allow="autoplay" frameborder="0"></iframe>    <script>
+        let player;
+
+        // Инициализация YouTube Player API
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('audio', {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // Когда плеер готов
+        function onPlayerReady(event) {
+            console.log('Player Ready');
+        }
+
+        // Когда состояние плеера изменяется
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                console.log("Воспроизведение");
+            }
+            if (event.data === YT.PlayerState.PAUSED) {
+                console.log("Пауза");
+            }
+        }
+
+        // Функция для воспроизведения/паузы
+        function togglePlay() {
+            if (player) {
+                if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+                    player.pauseVideo();
+                } else {
+                    player.playVideo();
+                }
+            }
+        }
+
+        // Загружаем API YouTube
+        var script = document.createElement('script');
+        script.src = "https://www.youtube.com/iframe_api";
+        document.body.appendChild(script);
+
+        // Автозапуск GIF
+        const gifs = document.querySelectorAll('.gif');
+        let currentGifIndex = 0;
+
+        function showNextGif() {
+            gifs[currentGifIndex].classList.remove('active'); // Убираем активный класс с текущего GIF
+            currentGifIndex = (currentGifIndex + 1) % gifs.length; // Переходим к следующему GIF
+            gifs[currentGifIndex].classList.add('active'); // Добавляем активный класс к следующему GIF
+        }
+
+        gifs[currentGifIndex].classList.add('active'); // Делаем первый GIF активным
+        setInterval(showNextGif, 3000); // Переключаем GIF каждые 3 секунды
+    </script>
+</body>
+</html>
+
+

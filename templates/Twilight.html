@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="twilight" >Twilight</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .top-bar a, .top-bar button {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back-home {
+            background-color: #11370d;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-back-home:hover {
+            background-color: #699563;
+        }
+
+        .control-btn {
+            background: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+        }
+
+        #gif-container {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            height: 70vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gif {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        .gif.active {
+            display: block;
+        }
+
+        .content {
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        h1, h2 {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #000000;
+        }
+     </style>
+
+   <script>
+    const translations = {
+
+      en: {
+  home: "Home",
+  genres: "Genres",
+  soundtrack: "Soundtrack ♬",
+  twilight: "Twilight",
+  description: "When Bella Swan moves to the small town of Forks, she doesn’t expect her life to change forever. But everything shifts when she meets Edward Cullen — a mysterious classmate with a dark secret: he’s a vampire. As their love deepens, Bella is drawn into a world of immortality, danger, and forbidden romance in this epic tale of passion and destiny.",
+  details: "Details:",
+  yearOfProduction: "Year of Production: 2008",
+  platform: "Platform: Summit Entertainment, Netflix",
+  country: "Country: USA 🇺🇸",
+  genre: "Genre: Fantasy, Romance, Drama",
+  tagline: 'Tagline: "When you can live forever, what do you live for?"',
+  worldPremiere: "World Premiere: November 17, 2008",
+  digitalRelease: "Digital Release: November 21, 2008",
+  ageRating: "Age Rating: 13+",
+  episodeLength: "Runtime: 122 minutes",
+  officialWebsite: "Official Website",
+  contactUs: "Do you have any questions? Write to us",
+  likes: "Likes",
+          season1:"Season 1",
+           season2:"Season 2",
+           season3:"Season 3",
+          season4:"Season 4",
+  copyright: "© 2024 VivaCine by Alibek Onege."
+},
+
+ru: {
+  home: "Главная",
+  genres: "Жанры",
+  soundtrack: "Саундтрек ♬",
+  twilight: "Сумерки",
+  description: "Когда Белла Свон переезжает в маленький город Форкс, она и представить не могла, как сильно изменится её жизнь. Всё меняется, когда она встречает загадочного одноклассника Эдварда Каллена — вампира. Их любовь бросает вызов всему: разуму, опасности и запретам. История о страсти, вечности и судьбе, покорившая миллионы сердец.",
+  details: "Детали:",
+  yearOfProduction: "Год производства: 2008",
+  platform: "Платформа: Summit Entertainment, Netflix",
+  country: "Страна: США 🇺🇸",
+     season1:"1 Сезон",
+    season2:"2 Сезон",
+    season3:"3 Сезон",
+    season4:"4 Сезон",
+  genre: "Жанр: Фэнтези, Романтика, Драма",
+  tagline: 'Девиз: "Если ты можешь жить вечно — ради чего ты живешь?"',
+  worldPremiere: "Мировая премьера: 17 ноября 2008 года",
+  digitalRelease: "Цифровой релиз: 21 ноября 2008 года",
+  ageRating: "Возрастной рейтинг: 13+",
+  episodeLength: "Продолжительность: 122 минуты",
+  officialWebsite: "Официальный сайт",
+  contactUs: "Есть вопросы? Напишите нам",
+  likes: "Лайков",
+  copyright: "© 2024 VivaCine, автор: Алибек Онеге."
+},
+
+kz: {
+  home: "Басты бет",
+  genres: "Жанрлар",
+  soundtrack: "Саундтрек ♬",
+  twilight: "Ымырт",
+     season1:"1 Маусым",
+    season2:"2 Маусым",
+    season3:"3 Маусым",
+    season4:"4 Маусым",
+  description: "Белла Свон Форкс атты шағын қалаға көшкенде, өмірі түбегейлі өзгереді деп ойламаған еді. Бірақ ол жұмбақ әрі сымбатты Эдвард Калленмен танысқанда, оның өмірі басқа арнаға бұрылады — Эдвард вампир. Бұл махаббат оларды қауіпке, тыйым салынған сезімдер мен мәңгілік таңдаулар әлеміне жетелейді.",
+  details: "Мазмұны:",
+  yearOfProduction: "Өндіріс жылы: 2008",
+  platform: "Платформа: Summit Entertainment, Netflix",
+  country: "Ел: АҚШ 🇺🇸",
+  genre: "Жанр: Фэнтези, Романтика, Драма",
+  tagline: 'Таңдаулы сөйлем: "Мәңгі өмір сүре алсаң — өмір сүрудің мәні не?"',
+  worldPremiere: "Дүниежүзілік премьера: 2008 жылдың 17 қарашасы",
+  digitalRelease: "Цифрлық релиз: 2008 жылдың 21 қарашасы",
+  ageRating: "Жас шектеуі: 13+",
+  episodeLength: "Ұзақтығы: 122 минут",
+  officialWebsite: "Ресми сайт",
+  contactUs: "Сұрақтарыңыз бар ма? Бізге жазыңыз",
+  likes: "Ұнатулар",
+  copyright: "© 2024 VivaCine, авторы: Әлібек Өнеге."
+}
+
+        };
+
+
+function changeLanguage(lang) {
+    localStorage.setItem('lang', lang); // Сохраняем выбранный язык
+    applyTranslations(lang);           // Применяем переводы
+}
+
+
+function applyTranslations(lang) {
+    // Находим все элементы с атрибутом data-translate
+    const elements = document.querySelectorAll('[data-translate]');
+    elements.forEach(el => {
+        // Получаем ключ для перевода
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+            // Применяем перевод, если ключ существует
+            el.textContent = translations[lang][key];
+        }
+    });
+}
+
+// Устанавливаем язык при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('lang') || 'kz'; // Язык по умолчанию: казахский
+    applyTranslations(savedLang);
+});
+    </script>
+</head>
+<body>
+
+
+<div class="top-bar">
+    <a href="{{ url_for('index') }}" class="btn-back-home" data-translate="home">Home</a>
+    <a href="{{ url_for('genres') }}" class="btn-back-home" data-translate="genres">Genres</a>
+    <button class="control-btn" onclick="togglePlay()" data-translate="soundtrack">Soundtrack ♬</button>
+</div>
+ <!-- Контейнер для GIF'ов -->
+<div id="gif-container">
+    <img class="gif" src="https://i.pinimg.com/originals/3a/ac/a1/3aaca1198cff267bf27bf68570452f7d.gif" alt="La Casa de Papel" />
+    <img class="gif" src="https://i.pinimg.com/originals/ba/c2/4f/bac24fd461645e1e9239bfa1bd6ff038.gif" alt="La Casa de Papel 2" />
+    <img class="gif" src="https://i.pinimg.com/originals/cb/b3/90/cbb3904a9a9e7a11c5f8230caa249be2.gif" alt="La Casa de Papel 3" />
+    <img class="gif" src="https://i.pinimg.com/originals/a8/56/0e/a8560eba1713cfc5d21d7943dbb068ba.gif" alt="La Casa de Papel 4" />
+    <img class="gif" src="https://i.pinimg.com/originals/70/7a/91/707a91916ec84fd6840dea83ea44e7c9.gif" alt="La Casa de Papel 5" />
+</div>
+
+    <div class="content">
+        <header>
+            <h1 data-translate="twilight">Twilight</h1>
+        </header>
+
+        <section>
+            <p data-translate="description">
+When Bella Swan moves to the small town of Forks, she doesn’t expect her life to change forever. But everything shifts when she meets Edward Cullen — a mysterious classmate with a dark secret: he’s a vampire. As their love deepens, Bella is drawn into a world of immortality, danger, and forbidden romance in this epic tale of passion and destiny.            </p>
+        </section>
+
+       <section class="details">
+    <h2 data-translate="details"> Details:</h2>
+    <ul>
+    <li data-translate="yearOfProduction">Year of Production: 2008</li>
+    <li data-translate="platform">Platform: Summit Entertainment, Netflix</li>
+    <li data-translate="country">Country: USA 🇺🇸</li>
+    <li data-translate="genre">Genre:  Fantasy, Romance, Drama</li>
+    <li data-translate="tagline">Tagline: "When you can live forever, what do you live for?" </li>
+    <li data-translate="worldPremiere">World Premiere: November 17, 2008 </li>
+    <li data-translate="digitalRelease">Digital Release: November 21, 2008</li>
+    <li data-translate="ageRating">Age Rating:13+</li>
+    <li data-translate="episodeLength">Episode Length: 122 minutes</li>
+</ul>
+
+
+ <div class="video-container">
+  <p class="video-title" data-translate="season1">Season 1</p>
+  <iframe src="https://drive.google.com/file/d/1BWogLjiyc-cNuiaPltZdplt8qg1s-14t/preview" width="900" height="500" allow="autoplay; fullscreen" allowfullscreen></iframe>
+</div>
+
+           <div class="video-container">
+  <p class="video-title" data-translate="season2">Season 2</p>
+  <iframe
+    src="https://drive.google.com/file/d/1Wakr0jk1CeF8ZjV4Bw7xaIQIafMVKM2H/preview"
+    width="900"
+    height="500"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
+
+          <div class="video-container">
+  <p class="video-title" data-translate="season3">Season 3</p>
+  <iframe
+    src="https://drive.google.com/file/d/1kcVRWxdO04Fo1W4m0ajgSOs7oaBBTeuT/preview"
+    width="900"
+    height="500"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
+
+<div class="video-container">
+  <p class="video-title" data-translate="season4">Season 4</p>
+  <iframe
+    src="https://drive.google.com/file/d/1Ltm7LhKkMVuBVSTgLYo249rOxUEm54be/preview"
+    width="900"
+    height="500"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
+
+
+
+
+
+</section>
+    </div>
+
+    <footer>
+    <div class="footer-content">
+
+        <div class="social-media">
+            <a href="https://www.facebook.com/?locale=ru_RU" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="https://x.com/?lang=ru" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+    <div class="footer-buttons">
+        <a href="/chat" class="contact-button" data-translate="contactUs" >Do you have any questions? Write to us</a>
+    </div>
+    <div class="footer-bottom">
+        <p data-translate="copyright">&copy; 2024 VivaCine by Alibek Onege.</p>
+    </div>
+</footer>
+<style>
+    footer {
+        background-color: #000;
+        color: #fff;
+        padding: 30px 0;
+        font-family: 'Arial', sans-serif;
+        text-align: center; /* Center the footer content */
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center; /* Center the content */
+        align-items: center;
+        margin-bottom: 20px;
+        flex-direction: column; /* Stack elements vertically */
+    }
+
+    .contacts p {
+        margin: 10px 0;
+        font-size: 15px;
+        font-weight: normal; /* Make the text normal weight */
+        pointer-events: none; /* Prevent text from being clickable */
+    }
+
+    .social-media {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .social-icon {
+        color: #fff;
+        font-size: 40px;
+        transition: color 0.3s ease;
+    }
+
+    .social-icon:hover {
+        color: #ff8c00; /* Hover color */
+    }
+
+    .footer-buttons {
+        margin-top: 20px;
+    }
+
+    .contact-button {
+        background-color: #020202;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .contact-button:hover {
+        background-color: #020202;
+        transform: scale(1.1);
+    }
+
+    .footer-bottom {
+        font-size: 14px;
+        opacity: 0.7;
+        margin-top: 20px;
+    }
+</style>
+<!-- Встроенный YouTube аудио -->
+<iframe id="audio" width="0" height="0" src="https://www.youtube.com/embed/mjtE18wsdzQ?autoplay=1&enablejsapi=1" allow="autoplay" frameborder="0"></iframe>
+
+<script>
+    let player;
+    let isPlaying = false;
+
+    // Инициализация YouTube Player API
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('audio', {
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        console.log('Player Ready');
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+            isPlaying = true;
+        } else if (event.data === YT.PlayerState.PAUSED) {
+            isPlaying = false;
+        }
+    }
+
+    // Воспроизведение и пауза с сохранением позиции
+    function togglePlay() {
+        if (player) {
+            if (isPlaying) {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
+            }
+        }
+    }
+
+    // Загрузка API YouTube
+    const script = document.createElement('script');
+    script.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(script);
+
+    // Автозапуск GIF
+    const gifs = document.querySelectorAll('.gif');
+    let currentGifIndex = 0;
+
+    function showNextGif() {
+        gifs[currentGifIndex].classList.remove('active'); // Убираем активный класс с текущего GIF
+        currentGifIndex = (currentGifIndex + 1) % gifs.length; // Переходим к следующему GIF
+        gifs[currentGifIndex].classList.add('active'); // Добавляем активный класс к следующему GIF
+    }
+
+    gifs[currentGifIndex].classList.add('active'); // Делаем первый GIF активным
+    setInterval(showNextGif, 3000); // Переключаем GIF каждые 3 секунды
+</script>
+
+</body>
+</html>

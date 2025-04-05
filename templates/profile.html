@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lastra&display=swap" rel="stylesheet">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+
+        .profile-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .profile-sidebar {
+            width: 20%;
+            padding: 20px;
+            background-color: #111;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            text-align: left;
+        }
+
+        .profile-sidebar h3 {
+            color: #ff8c00;
+            margin-bottom: 20px;
+        }
+
+        .profile-sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .profile-sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .profile-sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .profile-sidebar ul li a:hover {
+            color: #ff8c00;
+        }
+
+        .profile-main {
+            width: 70%;
+            padding: 20px;
+            background-color: #222;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            text-align: center; /* Центровка содержимого */
+        }
+
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #333;
+            background-color: black;
+            margin-bottom: 15px;
+        }
+
+        .profile-header h2 {
+            color: #ff8c00;
+            margin: 20px 10 0;
+        }
+
+        .profile-info {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .profile-info p {
+            margin: 5px 0;
+            font-size: 16px;
+            color: white;
+        }
+
+        .logout-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3f250e;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .logout-button:hover {
+            background-color: #ea9237;
+        }
+
+        html, body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('https://i.pinimg.com/originals/cb/d3/45/cbd3457722361747216898664c240200.gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 100%;
+}
+        header {
+            background-color: #000;
+            padding: 45px 0;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #000; /* Задайте нужный цвет фона */
+            z-index: 1000; /* Чтобы панель оставалась над остальными элементами */
+            padding: 10px 0;
+        }
+
+        body {
+            padding-top: 60px; /* Отступ сверху, чтобы контент не скрывался под навигационной панелью */
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        nav ul li {
+            margin: 0 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px 25px;
+            transition: all 0.3s ease;
+        }
+        nav ul li a:hover {
+            background: linear-gradient(45deg, #d89b1d, #ff8c00);
+            color: black;
+            transform: scale(1.2);
+        }
+
+        /* Home background */
+        .home-background {
+            background-image: url('/static/fon.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 70vh;
+            position: relative;
+        }
+        .center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #ffffff;
+        }
+        .language-buttons {
+  display: flex;
+  flex-direction: column; /* Расположить кнопки вертикально */
+  align-items: center; /* Центрировать кнопки по горизонтали */
+  margin-top: 0.5 px; /* Отступ сверху */
+}
+
+.lang-selector {
+  background-color: #000;
+  color: white;
+  border: none;
+  padding: 0px 20px; /* Размер кнопок меньше, чем у меню */
+  font-size: 10 px; /* Меньший размер текста */
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  margin: 0px 0; /* Отступ между кнопками */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lang-selector:hover {
+  background: linear-gradient(45deg, #d89b1d, #ff8c00);
+  color: black;
+  transform: scale(1.1);
+}
+
+.lang-selector:active {
+  transform: scale(1.05); /* Эффект нажатия */
+}
+
+        h1, h2 {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            font-weight: bolder;
+            font-size: 100px;
+            color: #f5ce0f;
+        }
+        h1 {
+            font-size: 50px;
+            color: #ffffff;
+        }
+
+        /* Movie catalog */
+        .movie-catalog {
+            padding: 40px;
+            background-color: #000;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+        .movie-catalog h2 {
+            color: #020202;
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif;
+        }
+        .movie-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-family: 'Arial', sans-serif;
+        }
+        .movie-card {
+            background-color: #020202;
+            width: 280px;
+            height: 400px;
+            border-radius:0px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            font-family: 'Arial', sans-serif;
+        }
+        .movie-card img {
+            width: 100%;
+            height: 80%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .movie-card:hover img {
+            transform: scale(1.1);
+        }
+        .movie-card h3 {
+            font-size: 24px;
+            color: #f5ce0f;
+            margin: 10px 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Бургер и адаптивность */
+.mobile-menu-toggle {
+  display: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  z-index: 1001;
+}
+
+/* Мобильный стиль — только на маленьких экранах */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color: #000;
+    width: 100%;
+    padding: 20px 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-links li {
+    margin: 10px 0;
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+}
+
+        .profile-sidebar h3,
+.profile-sidebar ul li a,
+.profile-info p,
+.logout-button,
+.profile-header h2,
+.movie-catalog h2,
+.movie-card h3,
+nav ul li a,
+.lang-selector,
+h1, h2 {
+    font-family: 'Arial', sans-serif;
+}
+
+    </style>
+    <script>
+        const translations = {
+   en: {
+    Welcome : "Welcome to",
+    title: "VivaCine",
+    home: "Home",
+    Genres: "Genres",
+    Categories: "Categories",
+    Posters: "Posters",
+    Reviews: "Reviews",
+    Search: "Search Movies",
+    Login: "Login",
+    Logout: "Logout",
+      Search: "Search Movies",
+    question: "Do you have any questions? Write to us",
+  MyProfile: "My profile",
+  PersonalInformation: "Personal information",
+  Settings: "Settings",
+  Logout: "Logout",
+  DeleteAccount: "Delete account",
+  EditProfile: "Edit profile",
+  FirstName: "First name",
+  LastName: "Last name:",
+  Email: "Email:",
+  Username: "Username:",
+      Edit:"Edit Profile",
+  DateOfBirth: "Date of birth:",
+  RegistrationDate: "Registration date:"
+},
+  ru: {
+    Welcome: "Добро пожаловать в",
+    title: "VivaCine",
+    home: "Главная",
+    Genres: "Жанры",
+    Categories: "Категории",
+    Posters: "Постеры",
+    Reviews: "Отзывы",
+    Search: "Поиск фильмов",
+    Login: "Войти",
+    Logout: "Выйти",
+      Search: "Поиск фильмов",
+    question: "Есть вопросы? Напишите нам",
+      footer: "© 2024 VivaCine, автор: Алибек Онеге.",
+  MyProfile: "Мой профиль",
+  PersonalInformation: "Личная информация",
+  Settings: "Настройки",
+  Logout: "Выйти",
+  DeleteAccount: "Удалить аккаунт",
+  EditProfile: "Редактировать профиль",
+  FirstName: "Имя:",
+  LastName: "Фамилия:",
+  Email: "Электронная почта:",
+  Username: "Имя пользователя:",
+  DateOfBirth: "Дата рождения:",
+      Edit:"Настройки Профиля",
+  RegistrationDate: "Дата регистрации:"
+},
+  kz: {
+    Welcome: "Қош келдіңіз",
+    title: "VivaCine",
+    home: "Басты бет",
+    Genres: "Жанрлар",
+    Categories: "Категориялар",
+    Posters: "Постерлер",
+    Reviews: "Пікірлер",
+    Search: "Фильм іздеу",
+    Login: "Кіру",
+    Logout: "Шығу",
+    question: "Сұрақтарыңыз бар ма? Бізге жазыңыз",
+      footer: "© 2024 VivaCine, авторы: Әлібек Өнеге.",
+      MyProfile: "Менің профилім",
+  PersonalInformation: "Жеке ақпарат",
+  Settings: "Баптаулар",
+  Logout: "Шығу",
+  DeleteAccount: "Аккаунтты жою",
+  EditProfile: "Профильді өңдеу",
+  FirstName: "Аты:",
+  LastName: "Тегі:",
+  Email: "Электрондық пошта:",
+      Edit:"Профилді өңдеу",
+  Username: "Пайдаланушы аты:",
+  DateOfBirth: "Туған күні:",
+  RegistrationDate: "Тіркелген күні:"
+}
+};
+
+
+
+        function changeLanguage(lang) {
+            localStorage.setItem('lang', lang);
+            applyTranslations(lang);
+        }
+
+        function applyTranslations(lang) {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('lang') || 'en';
+            applyTranslations(savedLang);
+        });
+    </script>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="mobile-menu-toggle" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="{{ url_for('index') }}" data-translate="home">Главная</a></li>
+      <li><a href="{{ url_for('genres') }}" data-translate="Genres">Жанры</a></li>
+      <li><a href="{{ url_for('categories') }}" data-translate="Categories">Категории</a></li>
+      <li><a href="{{ url_for('library') }}" data-translate="Posters">Постеры</a></li>
+      <li><a href="{{ url_for('search') }}" data-translate="Search">Поиск фильмов</a></li>
+
+      <li class="language-buttons">
+        <button class="lang-selector" onclick="changeLanguage('en')">EN</button>
+        <button class="lang-selector" onclick="changeLanguage('ru')">RU</button>
+        <button class="lang-selector" onclick="changeLanguage('kz')">KZ</button>
+      </li>
+
+      {% if session.get('user_id') %}
+        <li><a href="{{ url_for('profile') }}">{{ session.get('username') }}</a></li>
+      {% else %}
+        <li><a href="{{ url_for('login') }}" data-translate="Login">Login</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+</header>
+
+  <div class="profile-container">
+        <div class="profile-sidebar">
+            <h3 data-translate="MyProfile">My profile</h3>
+            <ul>
+                <li><a href="{{ url_for('profile') }}" data-translate="PersonalInformation">Personal information</a></li>
+                <li><a href="{{ url_for('edit_profile') }}" data-translate="Settings">Settings</a></li>
+                <li><a href="{{ url_for('logout') }}" data-translate="Logout">Logout</a></li>
+ </div>
+
+
+        <div class="profile-main">
+            <div class="profile-header">
+
+                {% if user.profile_picture %}
+                    <img src="{{ url_for('static', filename='profile_pictures/' + user.profile_picture) }}" alt="Profile Picture" class="profile-image">
+                {% else %}
+                    <img src="{{ url_for('static', filename='profile_pictures/default.jpg') }}" alt="Profile Picture" class="profile-image">
+                {% endif %}
+            </div>
+            <div class="profile-info">
+                <p><strong data-translate="FirstName">First name:</strong> {{ user.first_name }}</p>
+                <p><strong data-translate="LastName">Last name:</strong> {{ user.last_name }}</p>
+                <p><strong data-translate="Email">Email:</strong> {{ user.email }}</p>
+                <p><strong data-translate="Username">Username:</strong> {{ user.username }}</p>
+                <p><strong data-translate="DateOfBirth">Date of birth:</strong> {{ user.birth_date }}</p>
+                <p><strong data-translate="RegistrationDate">Registration date:</strong> {{ user.registered_at }}</p>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById('navLinks');
+    menu.classList.toggle('show');
+  }
+</script>
+
+
+</body>
+</html>
+
+

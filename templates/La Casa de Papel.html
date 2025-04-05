@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="laCasaDePapel">La Casa de Papel</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .top-bar a, .top-bar button {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back-home {
+            background-color: #8c0006;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-back-home:hover {
+            background-color: #3a1313;
+        }
+
+        .control-btn {
+            background: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+        }
+
+        #gif-container {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            height: 70vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gif {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        .gif.active {
+            display: block;
+        }
+
+        .content {
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        h1, h2 {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #000000;
+        }
+        .like-button {
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.like-button.liked {
+    color: red;  /* Цвет для активного лайка */
+}
+
+     </style>
+
+   <script>
+    const translations = {
+
+        en: {
+            home: "Home",
+            genres: "Genres",
+            soundtrack: "Soundtrack ♬",
+            laCasaDePapel: "La Casa de Papel",
+            description: "A brilliant mastermind assembles a team of criminals to pull off the biggest heist in history — stealing billions from the Royal Mint of Spain. As the tension rises, alliances are tested, and every move brings them closer to danger. With intricate plans, unexpected twists, and emotional battles, this high-stakes game of trust, betrayal, and survival keeps you on the edge of your seat until the very end.",
+            details: "Details:",
+            yearOfProduction: "Year of Production: 2017-2021",
+            platform: "Platform: Netflix",
+            country: "Country: Spain 🇪🇸",
+            genre: "Genre: Action, Thriller, Drama, Crime, Detective",
+            tagline: 'Tagline: "The Perfect Robbery"',
+            worldPremiere: "World Premiere: May 2, 2017",
+            digitalRelease: "Digital Release: December 20, 2017, 'Netflix'",
+            ageRating: "Age Rating: 18+",
+            episodeLength: "Episode Length: 50 minutes",
+            officialWebsite: "Official Website",
+            season1Episode1: "Season 1, Episode 1",
+            season1Episode2: "Season 1, Episode 2",
+            season1Episode3: "Season 1, Episode 3",
+            season1Episode4: "Season 1, Episode 4",
+            contactUs: "Do you have any questions? Write to us",
+            likes: "Likes",
+            copyright: "© 2024 VivaCine by Alibek Onege."
+        },
+        ru: {
+            home: "Главная",
+            genres: "Жанры",
+            soundtrack: "Саундтрек ♬",
+            laCasaDePapel: "Бумажный дом",
+            description: "Гениальный мастер разрабатывает план по созданию самой крупной кражи в истории — украсть миллиарды из Королевского монетного двора Испании. Пока напряжение растет, проверяются альянсы, и каждый шаг приближает их к опасности. С замысловатыми планами, неожиданными поворотами и эмоциональными битвами, эта игра на грани доверия, предательства и выживания держит вас в напряжении до самого конца.",
+            details: "Детали:",
+            yearOfProduction: "Год производства: 2017-2021",
+            platform: "Платформа: Netflix",
+            country: "Страна: Испания 🇪🇸",
+            genre: "Жанр: Экшн, Триллер, Драма, Криминал, Детектив",
+            tagline: 'Девиз: "Идеальное ограбление"',
+            worldPremiere: "Мировая премьера: 2 мая 2017 года",
+            digitalRelease: "Цифровой релиз: 20 декабря 2017 года, 'Netflix'",
+            ageRating: "Возрастной рейтинг: 18+",
+            episodeLength: "Продолжительность серии: 50 минут",
+            officialWebsite: "Официальный сайт",
+            season1Episode1: "Сезон 1, Серия 1",
+            season1Episode2: "Сезон 1, Серия 2",
+            season1Episode3: "Сезон 1, Серия 3",
+            season1Episode4: "Сезон 1, Серия 4",
+            contactUs: "Есть вопросы? Напишите нам",
+            likes: "Лайков",
+            copyright: "© 2024 VivaCine, автор: Алибек Онеге."
+        },
+         kz: {
+    home: "Басты бет",
+    genres: "Жанрлар",
+    soundtrack: "Саундтрек ♬",
+    laCasaDePapel: "Қағаз үй" ,
+    description: "Тапқыр стратег қылмыскерлер тобын құрып, тарихтағы ең үлкен қылмысты жасайды — Испанияның Корольдік монеталар зауытынан миллиардтарды ұрлайды. Кернеу артқан сайын, одақтастар сыналады және әрбір қадам оларды қауіпке жақындатады. Күрделі жоспарлар, күтпеген бұрылыстар мен эмоциялық күрестер — бұл сенім, сатқындық және аман қалу ойыны соңына дейін сізді орындықта ұстайды.",
+    details: "Мазмұны:",
+    yearOfProduction: "Өндіріс жылы: 2017-2021",
+    platform: "Платформа: Netflix",
+    country: "Ел: Испания 🇪🇸",
+    genre: "Жанр: Экшн, Триллер, Драма, Қылмыс, Детектив",
+    tagline: 'Таңдаулы сөйлем: "Тамаша ұрлық"',
+    worldPremiere: "Дүниежүзілік премьера: 2017 жылдың 2 мамыры",
+    digitalRelease: "Цифрлық релиз: 2017 жылдың 20 желтоқсаны, 'Netflix'",
+    ageRating: "Жас шектеуі: 18+",
+    episodeLength: "Эпизод ұзақтығы: 50 минут",
+    officialWebsite: "Ресми сайт",
+    season1Episode1: "1 маусым, 1 серия",
+    season1Episode2: "1 маусым, 2 серия",
+             season1Episode3: "1 маусым, 3 серия",
+             season1Episode4: "1 маусым, 4 серия",
+    contactUs: "Сұрақтарыңыз бар ма? Бізге жазыңыз",
+
+    copyright: "© 2024 VivaCine, авторы: Әлібек Өнеге."
+    }
+        };
+
+
+function changeLanguage(lang) {
+    localStorage.setItem('lang', lang); // Сохраняем выбранный язык
+    applyTranslations(lang);           // Применяем переводы
+}
+
+
+function applyTranslations(lang) {
+    // Находим все элементы с атрибутом data-translate
+    const elements = document.querySelectorAll('[data-translate]');
+    elements.forEach(el => {
+        // Получаем ключ для перевода
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+            // Применяем перевод, если ключ существует
+            el.textContent = translations[lang][key];
+        }
+    });
+}
+
+// Устанавливаем язык при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('lang') || 'kz'; // Язык по умолчанию: казахский
+    applyTranslations(savedLang);
+});
+    </script>
+</head>
+<body>
+
+
+<div class="top-bar">
+    <a href="{{ url_for('index') }}" class="btn-back-home" data-translate="home">Home</a>
+    <a href="{{ url_for('genres') }}" class="btn-back-home" data-translate="genres">Genres</a>
+    <button class="control-btn" onclick="togglePlay()" data-translate="soundtrack">Soundtrack ♬</button>
+</div>
+<div id="gif-container">
+        <img class="gif" src="https://i.pinimg.com/originals/15/da/4a/15da4ab565d706a56080494f3b63b084.gif" alt="La Casa de Papel" />
+        <img class="gif" src="https://i.pinimg.com/originals/66/41/a8/6641a89343c1616e4436545ae1c25ee1.gif" alt="La Casa de Papel 2" />
+        <img class="gif" src="https://i.pinimg.com/originals/a5/e5/65/a5e565d6b0ac55ac377debf24e278fc5.gif" alt="La Casa de Papel 3" />
+        <img class="gif" src="https://i.pinimg.com/originals/7e/7d/ad/7e7dad5a4de3515f9c8f5f429a16d059.gif" alt="La Casa de Papel 4" />
+        <img class="gif" src="https://i.pinimg.com/originals/76/de/a8/76dea8c713dad27abbe3cd4e59f402e2.gif" alt="La Casa de Papel 5" />
+    </div>
+    <div class="content">
+        <header>
+            <h1 data-translate="laCasaDePapel">La Casa de Papel</h1>
+        </header>
+
+        <section>
+            <p data-translate="description">A brilliant mastermind assembles a team of criminals to pull off the biggest heist in history — stealing billions from the Royal Mint of Spain. As the tension rises, alliances are tested, and every move brings them closer to danger. With intricate plans, unexpected twists, and emotional battles, this high-stakes game of trust, betrayal, and survival keeps you on the edge of your seat until the very end.</p>
+        </section>
+
+       <section class="details">
+    <h2 data-translate="details"> Details:</h2>
+    <ul>
+    <li data-translate="yearOfProduction">Year of Production: 2017-2021</li>
+    <li data-translate="platform">Platform: Netflix </li>
+    <li data-translate="country">Country: Spain 🇪🇸</li>
+    <li data-translate="genre">Genre: Action, Thriller, Drama, Crime, Detective</li>
+    <li data-translate="tagline">Tagline: "The Perfect Robbery"</li>
+    <li data-translate="worldPremiere">World Premiere: May 2, 2017, </li>
+    <li data-translate="digitalRelease">Digital Release: December 20, 2017, "Netflix"</li>
+    <li data-translate="ageRating">Age Rating: 18+</li>
+    <li data-translate="episodeLength">Episode Length: 50 minutes</li>
+</ul>
+
+
+ <div class="video-container">
+    <p class="video-title" data-translate="season1Episode1">Season 1, Episode 1</p>
+    <iframe src="https://drive.google.com/file/d/1raB-2jqIkqtj9FTHcycbUIzHfTG1KOKu/preview" width="900" height="500" allow="autoplay; fullscreen" allowfullscreen></iframe>
+</div>
+          <div class="video-container">
+    <p class="video-title" data-translate="season1Episode2">Season 1, Episode 2</p>
+    <iframe src="https://drive.google.com/file/d/10qYhJJRujyFgM-r_uq3tYOmrtBt59Yyy/preview" width="900" height="500" allow="autoplay; fullscreen" allowfullscreen></iframe>
+</div>
+           <div class="video-container">
+    <p class="video-title" data-translate="season1Episode3">Season 1, Episode 3</p>
+    <iframe src="https://drive.google.com/file/d/1YsbNykqpg_Imeq_l6sYNj0R2tXzRo_HT/preview" width="900" height="500" allow="autoplay; fullscreen" allowfullscreen></iframe>
+</div>
+           <div class="video-container">
+    <p class="video-title" data-translate="season1Episode4">Season 1, Episode 4</p>
+    <iframe src="https://drive.google.com/file/d/14pgYriaxWr3PjC6WT1PDVbSFvEtnK9p3/preview" width="900" height="500" allow="autoplay; fullscreen" allowfullscreen></iframe>
+</div>
+
+
+
+
+</section>
+    </div>
+
+    <footer>
+    <div class="footer-content">
+
+        <div class="social-media">
+            <a href="https://www.facebook.com/?locale=ru_RU" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="https://x.com/?lang=ru" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+    <div class="footer-buttons">
+        <a href="/chat" class="contact-button" data-translate="contactUs" >Do you have any questions? Write to us</a>
+    </div>
+    <div class="footer-bottom">
+        <p data-translate="copyright">&copy; 2024 VivaCine by Alibek Onege.</p>
+    </div>
+</footer>
+<style>
+    footer {
+        background-color: #000;
+        color: #fff;
+        padding: 30px 0;
+        font-family: 'Arial', sans-serif;
+        text-align: center; /* Center the footer content */
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center; /* Center the content */
+        align-items: center;
+        margin-bottom: 20px;
+        flex-direction: column; /* Stack elements vertically */
+    }
+
+    .contacts p {
+        margin: 10px 0;
+        font-size: 15px;
+        font-weight: normal; /* Make the text normal weight */
+        pointer-events: none; /* Prevent text from being clickable */
+    }
+
+    .social-media {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .social-icon {
+        color: #fff;
+        font-size: 40px;
+        transition: color 0.3s ease;
+    }
+
+    .social-icon:hover {
+        color: #ff8c00; /* Hover color */
+    }
+
+    .footer-buttons {
+        margin-top: 20px;
+    }
+
+    .contact-button {
+        background-color: #020202;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .contact-button:hover {
+        background-color: #020202;
+        transform: scale(1.1);
+    }
+
+    .footer-bottom {
+        font-size: 14px;
+        opacity: 0.7;
+        margin-top: 20px;
+    }
+</style>
+
+
+
+     <!-- Встроенный YouTube аудио -->
+    <iframe id="audio" width="0" height="0" src="https://www.youtube.com/embed/ehZFyxRbyd0?autoplay=1&enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+    <script>
+        let player;
+
+        // Инициализация YouTube Player API
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('audio', {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // Когда плеер готов
+        function onPlayerReady(event) {
+            console.log('Player Ready');
+        }
+
+        // Когда состояние плеера изменяется
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                console.log("Воспроизведение");
+            }
+            if (event.data === YT.PlayerState.PAUSED) {
+                console.log("Пауза");
+            }
+        }
+
+        // Функция для воспроизведения/паузы
+        function togglePlay() {
+            if (player) {
+                if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+                    player.pauseVideo();
+                } else {
+                    player.playVideo();
+                }
+            }
+        }
+
+        // Загружаем API YouTube
+        var script = document.createElement('script');
+        script.src = "https://www.youtube.com/iframe_api";
+        document.body.appendChild(script);
+
+        // Автозапуск GIF
+        const gifs = document.querySelectorAll('.gif');
+        let currentGifIndex = 0;
+
+        function showNextGif() {
+            gifs[currentGifIndex].classList.remove('active'); // Убираем активный класс с текущего GIF
+            currentGifIndex = (currentGifIndex + 1) % gifs.length; // Переходим к следующему GIF
+            gifs[currentGifIndex].classList.add('active'); // Добавляем активный класс к следующему GIF
+        }
+
+        gifs[currentGifIndex].classList.add('active'); // Делаем первый GIF активным
+        setInterval(showNextGif, 3000); // Переключаем GIF каждые 3 секунды
+        // Функция для переключения состояния лайка
+
+
+        function toggleLike(button) {
+    const likeCountElement = button.nextElementSibling; // Находим элемент с количеством лайков
+    let likeCount = parseInt(likeCountElement.textContent);
+
+    // Проверяем, был ли фильм уже лайкнут
+    if (button.classList.contains("liked")) {
+        // Убираем лайк
+        button.classList.remove("liked");
+        likeCount--;
+    } else {
+        // Добавляем лайк
+        button.classList.add("liked");
+        likeCount++;
+    }
+
+    // Обновляем количество лайков на экране
+    likeCountElement.textContent = likeCount;
+}
+
+
+    </script>
+</body>
+</html>
+
+

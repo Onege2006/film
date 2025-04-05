@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="Chat">Chat with Administrator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+<style>
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)),
+                url("{{ url_for('static', filename='fon1.jpg') }}") no-repeat center center fixed;
+    background-size: cover;
+    animation: moveBackground 15s linear infinite; /* Добавляем анимацию */
+    backdrop-filter: blur(10px); /* Блюр фона */
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Анимация для движения фона */
+@keyframes moveBackground {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
+}
+.header {
+    text-align: center;
+    margin: 20px 0;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: #ffffff; /* Golden color */
+    text-shadow: 2px 2px 4px rgb(80, 31, 0);
+}
+
+/* Chat container */
+.chat-container {
+    width: 85%;
+    max-width: 600px;
+    background: rgba(42, 42, 42, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.messages {
+    background: linear-gradient(135deg, #631963, #363040); /* Gradient */
+    padding: 15px;
+    border-radius: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+.message .sender {
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.58); /* Light golden */
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    resize: none;
+    background-color: #333;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+textarea::placeholder {
+    color: #bbb;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #633363;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0px; /* Add spacing between buttons */
+}
+
+button:hover {
+    background-color: rgba(25, 15, 90, 0.78);
+    transform: translateY(-2px);
+}
+
+/* Styles for "Home" button */
+.home-button {
+    width: 96%; /* Button width */
+    padding: 12px;
+    background-color: #4e4691;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: center; /* Center the text */
+    margin: 20px auto; /* Center button horizontally */
+}
+
+.home-button:hover {
+    background-color: #012a59; /* Light shade */
+    transform: translateY(-2px);
+}
+
+/* Style for link inside the "Home" button */
+.home-button a {
+    color: #ffffff;
+    text-decoration: none; /* Remove underline */
+    display: block; /* Make the link block-level to occupy the full button width */
+    height: 100%; /* Ensure it stretches vertically */
+    width: 100%; /* Stretch across the full width */
+}
+
+</style>
+<script>
+       const translations = {
+    en: {
+        home: "Home",
+        Genres: "Genres",
+        sub: "Explore the genres that resonate with you. Below, you'll find a curated list of all our available genres, offering something for every taste. Whether you're into action-packed adventures, heartfelt dramas, or laugh-out-loud comedies, there's a genre waiting for you to dive into.",
+        Action: "Action",
+        sub1: "Welcome to the world of endless adrenaline and breathtaking events! Epic battles, dangerous chases, and heart-stopping stunts will keep you on the edge of your seat. Every moment is a new adventure!",
+        Comedy: "Comedy",
+        sub2: "Comedy is a genre that offers a delightful escape from daily challenges, bringing joy and laughter to your heart. With endless jokes, amusing situations, and heartwarming moments, comedies brighten our lives and remind us of life's lighter side. Watching a comedy is a perfect way to spend time with friends or family, sharing smiles and creating unforgettable memories. Each laugh is a burst of energy and happiness!",
+        Drama: "Drama",
+        Horror: "Horror",
+        SciFi: "Sci-Fi",
+        Romance: "Romance",
+        Thriller: "Thriller",
+        Adventure: "Adventure",
+        Animation: "Animation",
+        Categories: "Categories",
+        Posters: "Posters",
+        Reviews: "Reviews",
+        Search: "Search Movies",
+        Login: "Login",
+        question: "Do you have any questions? Write to us",
+        footer: "© 2024 VivaCine by Alibek Onege.",
+        LaCasaDePapel: "La Casa de Papel",
+    Movie2: "Pirates of the Caribbean",
+    PiratesOfTheCaribbean: "Pirates of the Caribbean",
+    Movie3: "Movie 3",
+    Leon: "Leon",
+    Movie4: "Movie 4",
+    SlovoPatsana: "A Man's Word",
+    Movie5: "Fast and Furious",
+    Movie6: "Ocean's 8",
+    Movie7: "Oppenheimer",
+    Movie8: "Titanic",
+    Movie9: "Home Alone",
+    Movie10: "Insidious",
+    Movie11: "Interstellar",
+        Send:"Send Message",
+        Chat:"Chat with Administrator",
+    Movie12: "Avatar: The Last Airbender",
+    BoysOverFlowers: "Boys Over Flowers",
+    Twilight: "Twilight",
+    WinxClub: "Winx Club"
+    },
+    ru: {
+        home: "Главная",
+        Genres: "Жанры",
+        sub: "Выберите жанры, которые вам по душе. Ниже представлен наш полный список жанров, где каждый найдет что-то для себя. Любите ли вы захватывающие приключения, трогательные драмы или веселые комедии — вас ждут фильмы на любой вкус.",
+        Action: "Боевик",
+        sub1: "Добро пожаловать в мир бесконечного адреналина и захватывающих событий! Грандиозные битвы, опасные погони и головокружительные трюки не дадут вам заскучать. Каждая минута – это новый взрыв эмоций!",
+        Comedy: "Комедия",
+        sub2: "Комедия — это жанр, который помогает отвлечься от повседневных забот и подарить радость и смех. Захватывающие шутки, курьёзные ситуации и лёгкие моменты согревают сердце и дарят хорошее настроение. Комедии идеально подходят для просмотра с друзьями или семьёй, чтобы насладиться атмосферой счастья. Каждая улыбка — это заряд позитива и вдохновение на весь день!",
+        Drama: "Драма",
+        Horror: "Ужасы",
+        SciFi: "Фантастика",
+        Romance: "Романтика",
+        Thriller: "Триллер",
+        Adventure: "Приключения",
+        Animation: "Мультфильм",
+        Categories: "Категории",
+        Posters: "Постеры",
+        Reviews: "Отзывы",
+        Search: "Поиск фильмов",
+        Login: "Войти",
+        question: "Есть вопросы? Напишите нам",
+        footer: "© 2024 VivaCine, автор: Алибек Онеге.",
+        LaCasaDePapel: "Бумажный дом",
+    Movie2: "Пираты Карибского моря",
+    PiratesOfTheCaribbean: "Пираты Карибского моря",
+    Movie3: "Фильм 3",
+    Leon: "Леон",
+    Movie4: "Фильм 4",
+    SlovoPatsana: "Слово пацана",
+        Chat:"Чат с Администратором",
+        Send:"Отправить сообщение",
+    Movie5: "Форсаж",
+    Movie6: "8 подруг Оушена",
+    Movie7: "Оппенгеймер",
+    Movie8: "Титаник",
+    Movie9: "Один дома",
+    Movie10: "Астрал",
+    Movie11: "Интерстеллар",
+    Movie12: "Аватар: Легенда об Аанге",
+    BoysOverFlowers: "Мальчики краше цветов",
+    Twilight: "Сумерки",
+    WinxClub: "Клуб Винкс"
+    },
+    kz: {
+        home: "Басты бет",
+        Genres: "Жанрлар",
+        sub: "Өзіңізге жақын жанрларды таңдап, кино әлеміне саяхат жасаңыз. Төменде біз ұсынған жанрлардың алуан түрлілігімен танысып, өзіңізге ұнайтын туындыларды табыңыз. Шексіз шытырман оқиғалар, жүректі тебірентер драмалар немесе күлкі сыйлайтын комедиялар — барлығы сіз үшін!",
+        Action: "Экшн",
+        sub1: "Шексіз адреналин мен қарқынды оқиғалар әлеміне қош келдіңіз! Керемет шайқастар, қауіпті қудалаулар мен жүрек тоқтатарлық көріністер сізді бей-жай қалдырмайды. Әрбір сәт – жаңа шытырман оқиға!",
+        Comedy: "Комедия",
+        sub2: "Комедиялар – күнделікті өмірдің қиындықтарынан бір сәтке болсын алшақтатып, күлкі мен қуаныш сыйлайтын жанр. Олар шексіз әзілдер, қызықты оқиғалар және жүрек жылытатын сәттер арқылы бізді жеңіл өмірге жетелейді. Комедияларды тамашалау – достарыңызбен немесе отбасыңызбен уақыт өткізудің тамаша тәсілі. Әр күлкі сәті сізге жаңа өмір қуатын сыйлайды!",
+        Drama: "Драма",
+        Horror: "Қорқынышты",
+        SciFi: "Ғылыми фантастика",
+        Romance: "Мелодрама",
+        Thriller: "Триллер",
+        Adventure: "Шытырман оқиғалар",
+        Animation: "Анимация",
+        Categories: "Категориялар",
+        Posters: "Постерлер",
+        Reviews: "Пікірлер",
+        Search: "Фильм іздеу",
+        Login: "Кіру",
+        question: "Сұрақтарыңыз бар ма? Бізге жазыңыз",
+        Chat:"Администратормен Чат",
+        Send:"Хатты жіберу",
+        footer: "© 2024 VivaCine, авторы: Әлібек Өнеге.",
+        LaCasaDePapel: "Қағаз үй",
+    Movie2: "Кариб теңізінің қарақшылары",
+    PiratesOfTheCaribbean: "Кариб теңізінің қарақшылары",
+    Movie3: "Фильм 3",
+    Leon: "Леон",
+    Movie4: "Фильм 4",
+    SlovoPatsana: "Жігіт сөзі",
+    Movie5: "Форсаж",
+    Movie6: "Оушеннің 8 құрбысы",
+    Movie7: "Оппенгеймер",
+    Movie8: "Титаник",
+    Movie9: "Үйде жалғыз",
+    Movie10: "Астрал",
+    Movie11: "Интерстеллар",
+    Movie12: "Аватар: Соңғы әуе билеушісі",
+    BoysOverFlowers: "Гүлдерден әдемі жігіттер",
+    Twilight: "Ымырт",
+    WinxClub: "Винкс клубы"
+    }
+};
+
+
+function changeLanguage(lang) {
+    localStorage.setItem('lang', lang); // Сохраняем выбранный язык
+    applyTranslations(lang);           // Применяем переводы
+}
+
+
+function applyTranslations(lang) {
+    // Находим все элементы с атрибутом data-translate
+    const elements = document.querySelectorAll('[data-translate]');
+    elements.forEach(el => {
+        // Получаем ключ для перевода
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+            // Применяем перевод, если ключ существует
+            el.textContent = translations[lang][key];
+        }
+    });
+}
+
+// Устанавливаем язык при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('lang') || 'kz'; // Язык по умолчанию: казахский
+    applyTranslations(savedLang);
+});
+    </script>
+<body>
+    <div class="header">
+        <h1 data-translate="Chat">Chat with Administrator</h1>
+    </div>
+
+    <div class="chat-container">
+        <div class="messages">
+            {% for msg in messages %}
+                <div class="message">
+                    <span class="sender">{{ msg.sender }}:</span> {{ msg.message }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <form method="POST">
+            <textarea name="message" required placeholder="Enter your message..."></textarea><br>
+            <button type="submit" data-translate="Send">Send</button>
+        </form>
+
+    </div>
+</body>
+</html>
+

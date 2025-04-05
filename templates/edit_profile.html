@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit profile</title>
+
+    <style>
+        body {
+    background-color: #0c0c0c;  /* Теплый желто-песочный цвет для случаев, когда GIF не загрузится */
+            font-family: Arial, sans-serif;
+            color: #4b300f; /* Оранжевый цвет текста */
+            margin: 0;
+            padding: 0;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .top-bar a, .top-bar button {
+            color: #e85e00;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back-profile {
+            background-color: #0c0c0c;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-back-profile:hover {
+            background-color: #0c0c0c;
+        }
+
+        /* Кнопки без фона */
+        .control-btn {
+            background: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #5a2511; /* Оранжевый цвет для заголовка */
+            margin-top: 50px;
+        }
+
+        form {
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #222; /* Темный фон для формы */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #e85e00; /* Оранжевый цвет для текста лейблов */
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            font-size: 1rem;
+            color: #e85e00; /* Темный цвет для текста в input */
+            background-color: #333; /* Белый фон для полей ввода */
+        }
+
+        button {
+            background-color: #4a2208; /* Оранжевая кнопка */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #50270c; /* Более темный оранжевый на hover */
+        }
+
+        input[type="file"] {
+            padding: 5px;
+        }
+
+
+    </style>
+      <script>
+        const translations = {
+  en: {
+    Welcome : "Welcome to",
+    title: "VivaCine",
+    home: "Home",
+    Genres: "Genres",
+    Categories: "Categories",
+    Posters: "Posters",
+    Reviews: "Reviews",
+    Search: "Search Movies",
+    Login: "Login",
+    Logout: "Logout",
+      Search: "Search Movies",
+    question: "Do you have any questions? Write to us",
+  MyProfile: "My profile",
+  PersonalInformation: "Personal information",
+  Settings: "Settings",
+  Logout: "Logout",
+  DeleteAccount: "Delete account",
+  EditProfile: "Edit profile",
+  FirstName: "First name",
+  LastName: "Last name:",
+  Email: "Email:",
+  Username: "Username:",
+      Edit:"Edit Profile",
+  DateOfBirth: "Date of birth:",
+      Save:"Save",
+      ProfilePicture:"Profile Picture:",
+  RegistrationDate: "Registration date:"
+},
+  ru: {
+    Welcome: "Добро пожаловать в",
+    title: "VivaCine",
+    home: "Главная",
+    Genres: "Жанры",
+    Categories: "Категории",
+    Posters: "Постеры",
+    Reviews: "Отзывы",
+    Search: "Поиск фильмов",
+    Login: "Войти",
+    Logout: "Выйти",
+      Search: "Поиск фильмов",
+    question: "Есть вопросы? Напишите нам",
+      footer: "© 2024 VivaCine, автор: Алибек Онеге.",
+  MyProfile: "Мой профиль",
+  PersonalInformation: "Личная информация",
+  Settings: "Настройки",
+  Logout: "Выйти",
+  DeleteAccount: "Удалить аккаунт",
+  EditProfile: "Редактировать профиль",
+  FirstName: "Имя:",
+  LastName: "Фамилия:",
+  Email: "Электронная почта:",
+  Username: "Имя пользователя:",
+  DateOfBirth: "Дата рождения:",
+      Edit:"Настройки Профиля",
+      ProfilePicture:"Фото Профиля",
+      Save:"Cохранить",
+  RegistrationDate: "Дата регистрации:"
+},
+  kz: {
+      Save:"Сақтау",
+    Welcome: "Қош келдіңіз",
+    title: "VivaCine",
+    home: "Басты бет",
+    Genres: "Жанрлар",
+    Categories: "Категориялар",
+    Posters: "Постерлер",
+    Reviews: "Пікірлер",
+    Search: "Фильм іздеу",
+    Login: "Кіру",
+    Logout: "Шығу",
+    question: "Сұрақтарыңыз бар ма? Бізге жазыңыз",
+      footer: "© 2024 VivaCine, авторы: Әлібек Өнеге.",
+      MyProfile: "Менің профилім",
+  PersonalInformation: "Жеке ақпарат",
+  Settings: "Баптаулар",
+  Logout: "Шығу",
+  DeleteAccount: "Аккаунтты жою",
+  EditProfile: "Профильді өңдеу",
+  FirstName: "Аты:",
+  LastName: "Тегі:",
+  Email: "Электрондық пошта:",
+      Edit:"Профилді өңдеу",
+  Username: "Пайдаланушы аты:",
+  DateOfBirth: "Туған күні:",
+  ProfilePicture: "Профиль Суреті",
+  RegistrationDate: "Тіркелген күні:"
+}
+};
+
+
+        function changeLanguage(lang) {
+            localStorage.setItem('lang', lang);
+            applyTranslations(lang);
+        }
+
+        function applyTranslations(lang) {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('lang') || 'en';
+            applyTranslations(savedLang);
+        });
+    </script>
+</head>
+
+<body>
+
+
+<!-- Верхняя панель с кнопками -->
+    <div class="top-bar">
+        <a href="{{ url_for('profile') }}" class="btn-back-profile" data-translate="MyProfile">My profile</a>
+    </div>
+
+
+    <h1 data-translate="Edit">Edit profile</h1>
+    <form method="POST" enctype="multipart/form-data">
+
+        <label data-translate="FirstName">First name:</label>
+        <input type="text" name="first_name" value="{{ user[1] }}" required><br>
+
+        <label data-translate="LastName">Last name:</label>
+        <input type="text" name="last_name" value="{{ user[2] }}" required><br>
+
+        <label data-translate="UserName">Username:</label>
+        <input type="text" name="username" value="{{ user[3] }}" required><br>
+
+        <label data-translate="Email">Email:</label>
+        <input type="email" name="email" value="{{ user[4] }}" required><br>
+
+        <label data-translate="DateOfBirth">Date of birth:</label>
+        <input type="date" name="birth_date" value="{{ user[5] }}"><br>
+
+        <label data-translate="ProfilePicture">Profile picture:</label>
+        <input type="file" name="profile_picture"><br>
+
+        <button type="submit" data-translate="Save">Save</button>
+    </form>
+
+    <form method="POST" action="{{ url_for('delete_account') }}" style="margin-top: 20px;">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete your account?')">
+            Delete account
+        </button>
+    </form>
+
+</body>
+</html>

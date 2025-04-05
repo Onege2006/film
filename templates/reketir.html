@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="Racketeer" >Racketeer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .top-bar a, .top-bar button {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back-home {
+            background-color: #4a320d;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-back-home:hover {
+            background-color: #7e612c;
+        }
+
+        .control-btn {
+            background: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+        }
+
+        #gif-container {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            height: 70vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gif {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        .gif.active {
+            display: block;
+        }
+
+        .content {
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        h1, h2 {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #000000;
+        }
+     </style>
+
+   <script>
+    const translations = {
+
+      en: {
+  home: "Home",
+  genres: "Genres",
+  soundtrack: "Soundtrack ♬",
+  Racketeer: "Racketeer",
+  description: "This gritty crime drama follows the rise and fall of a young man who gets entangled in the criminal underworld of Kazakhstan. Faced with betrayal, power, and moral choices, he must decide whether to follow the rules of the streets or carve out his own destiny.",
+  details: "Details:",
+  yearOfProduction: "Year of Production: 2007",
+  platform: "Platform: Kazakhfilm, YouTube",
+  country: "Country: Kazakhstan 🇰🇿",
+  genre: "Genre: Crime, Drama, Action",
+  tagline: 'Tagline: "Every choice has a price."',
+  worldPremiere: "World Premiere: October 11, 2007",
+  digitalRelease: "Digital Release: December 2007",
+  ageRating: "Age Rating: 18+",
+  episodeLength: "Runtime: 90 minutes",
+  officialWebsite: "Official Website",
+  contactUs: "Do you have any questions? Write to us",
+  likes: "Likes",
+  copyright: "© 2024 VivaCine by Alibek Onege."
+},
+
+ru: {
+  home: "Главная",
+  genres: "Жанры",
+  soundtrack: "Саундтрек ♬",
+  Racketeer: "Рэкетир",
+  description: "Криминальная драма о молодом парне, который становится частью преступного мира Казахстана. Предательство, власть и моральный выбор — ему предстоит решить, играть по чужим правилам или выбрать свой путь.",
+  details: "Детали:",
+  yearOfProduction: "Год производства: 2007",
+  platform: "Платформа: Казахфильм, YouTube",
+  country: "Страна: Казахстан 🇰🇿",
+  genre: "Жанр: Криминал, Драма, Боевик",
+  tagline: 'Девиз: "У каждого выбора есть цена."',
+  worldPremiere: "Мировая премьера: 11 октября 2007 года",
+  digitalRelease: "Цифровой релиз: декабрь 2007 года",
+  ageRating: "Возрастной рейтинг: 18+",
+  episodeLength: "Продолжительность: 90 минут",
+  officialWebsite: "Официальный сайт",
+  contactUs: "Есть вопросы? Напишите нам",
+  likes: "Лайков",
+  copyright: "© 2024 VivaCine, автор: Алибек Онеге."
+},
+
+kz: {
+  home: "Басты бет",
+  genres: "Жанрлар",
+  soundtrack: "Саундтрек ♬",
+  Racketeer: "Рэкетир",
+  description: "Бұл қылмыстық драмада Қазақстандағы қылмыстық әлемге тап болған жас жігіттің өмір жолы баяндалады. Опасыздық, билік пен моральдық таңдаулар арасында ол өз жолын өзі таңдауы керек.",
+  details: "Мазмұны:",
+  yearOfProduction: "Өндіріс жылы: 2007",
+  platform: "Платформа: Қазақфильм, YouTube",
+  country: "Ел: Қазақстан 🇰🇿",
+  genre: "Жанр: Қылмыс, Драма, Экшн",
+  tagline: 'Ұраны: "Әр таңдаудың өз бағасы бар."',
+  worldPremiere: "Дүниежүзілік премьера: 2007 жылғы 11 қазан",
+  digitalRelease: "Цифрлық релиз: 2007 жылғы желтоқсан",
+  ageRating: "Жас шектеуі: 18+",
+  episodeLength: "Ұзақтығы: 90 минут",
+  officialWebsite: "Ресми сайт",
+  contactUs: "Сұрақтарыңыз бар ма? Бізге жазыңыз",
+  likes: "Ұнатулар",
+  copyright: "© 2024 VivaCine, авторы: Әлібек Өнеге."
+}
+
+
+        };
+
+
+function changeLanguage(lang) {
+    localStorage.setItem('lang', lang); // Сохраняем выбранный язык
+    applyTranslations(lang);           // Применяем переводы
+}
+
+
+function applyTranslations(lang) {
+    // Находим все элементы с атрибутом data-translate
+    const elements = document.querySelectorAll('[data-translate]');
+    elements.forEach(el => {
+        // Получаем ключ для перевода
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+            // Применяем перевод, если ключ существует
+            el.textContent = translations[lang][key];
+        }
+    });
+}
+
+// Устанавливаем язык при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('lang') || 'kz'; // Язык по умолчанию: казахский
+    applyTranslations(savedLang);
+});
+    </script>
+</head>
+<body>
+
+
+<div class="top-bar">
+    <a href="{{ url_for('index') }}" class="btn-back-home" data-translate="home">Home</a>
+    <a href="{{ url_for('genres') }}" class="btn-back-home" data-translate="genres">Genres</a>
+    <button class="control-btn" onclick="togglePlay()" data-translate="soundtrack">Soundtrack ♬</button>
+</div>
+
+ <!-- Контейнер для GIF'ов -->
+   <div id="gif-container">
+       <img class="gif" src="https://i.postimg.cc/GcVLQRsD/my-gif-1.gif" alt="La Casa de Papel" />
+       <img class="gif" src="https://i.postimg.cc/65mgXWKL/my-gif-4.gif" alt="La Casa de Papel 2" />
+       <img class="gif" src="https://i.postimg.cc/KvcjVyr5/IMB-IUC9-S3.gif" alt="La Casa de Papel 3" />
+       <img class="gif" src="https://i.postimg.cc/65mgXWKL/my-gif-4.gif" alt="La Casa de Papel 4" />
+       <img class="gif" src="https://i.postimg.cc/3NgW28Ts/IMB-8flc-D5.gif" alt="La Casa de Papel 5" />
+   </div>
+
+
+
+    <div class="content">
+        <header>
+            <h1 data-translate="Racketeer">Racketeer</h1>
+        </header>
+
+        <section>
+            <p data-translate="description">
+                In a future where Earth is becoming uninhabitable, a group of explorers led by former NASA pilot Cooper travel through a wormhole in search of a new home for humanity. As time, space, and gravity collide, they must make sacrifices that will define the future of civilization — and their own families. A visually stunning, emotional journey through science and the human spirit.
+            </p>
+        </section>
+
+       <section class="details">
+    <h2 data-translate="details"> Details:</h2>
+    <ul>
+    <li data-translate="yearOfProduction">Year of Production: 2014</li>
+    <li data-translate="platform">Platform: Paramount Pictures, Netflix</li>
+    <li data-translate="country">Country: USA 🇺🇸</li>
+    <li data-translate="genre">Genre: Sci-Fi, Adventure, Drama</li>
+    <li data-translate="tagline">Tagline: "Mankind was born on Earth. It was never meant to die here." </li>
+    <li data-translate="worldPremiere">World Premiere: October 26, 2014 </li>
+    <li data-translate="digitalRelease">Digital Release: November 7, 2014</li>
+    <li data-translate="ageRating">Age Rating: 13+</li>
+    <li data-translate="episodeLength">Episode Length: 169 minutes</li>
+</ul>
+
+
+ <div class="video-container">
+  <p class="video-title" data-translate="Racketeer">Racketeer</p>
+  <iframe
+    src="https://drive.google.com/file/d/1Ct8pb1jQeU1AmoqGb17fhuweLx82vNGA/preview"
+    width="900"
+    height="500"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
+
+
+
+
+
+</section>
+    </div>
+
+    <footer>
+    <div class="footer-content">
+
+        <div class="social-media">
+            <a href="https://www.facebook.com/?locale=ru_RU" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="https://x.com/?lang=ru" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+    <div class="footer-buttons">
+        <a href="/chat" class="contact-button" data-translate="contactUs" >Do you have any questions? Write to us</a>
+    </div>
+    <div class="footer-bottom">
+        <p data-translate="copyright">&copy; 2024 VivaCine by Alibek Onege.</p>
+    </div>
+</footer>
+<style>
+    footer {
+        background-color: #000;
+        color: #fff;
+        padding: 30px 0;
+        font-family: 'Arial', sans-serif;
+        text-align: center; /* Center the footer content */
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center; /* Center the content */
+        align-items: center;
+        margin-bottom: 20px;
+        flex-direction: column; /* Stack elements vertically */
+    }
+
+    .contacts p {
+        margin: 10px 0;
+        font-size: 15px;
+        font-weight: normal; /* Make the text normal weight */
+        pointer-events: none; /* Prevent text from being clickable */
+    }
+
+    .social-media {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .social-icon {
+        color: #fff;
+        font-size: 40px;
+        transition: color 0.3s ease;
+    }
+
+    .social-icon:hover {
+        color: #ff8c00; /* Hover color */
+    }
+
+    .footer-buttons {
+        margin-top: 20px;
+    }
+
+    .contact-button {
+        background-color: #020202;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .contact-button:hover {
+        background-color: #020202;
+        transform: scale(1.1);
+    }
+
+    .footer-bottom {
+        font-size: 14px;
+        opacity: 0.7;
+        margin-top: 20px;
+    }
+</style>
+<!-- Встроенный YouTube аудио -->
+<iframe id="audio" width="0" height="0" src="https://www.youtube.com/embed/QT5WslUsi6A?autoplay=1&enablejsapi=1" allow="autoplay" frameborder="0"></iframe>
+
+
+   <script>
+    let player;
+    let isPlaying = false;
+
+    // Инициализация YouTube Player API
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('audio', {
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        console.log('Player Ready');
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+            isPlaying = true;
+        } else if (event.data === YT.PlayerState.PAUSED) {
+            isPlaying = false;
+        }
+    }
+
+    // Воспроизведение и пауза с сохранением позиции
+    function togglePlay() {
+        if (player) {
+            if (isPlaying) {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
+            }
+        }
+    }
+
+    // Загрузка API YouTube
+    const script = document.createElement('script');
+    script.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(script);
+
+    // Автозапуск GIF
+    const gifs = document.querySelectorAll('.gif');
+    let currentGifIndex = 0;
+
+    function showNextGif() {
+        gifs[currentGifIndex].classList.remove('active'); // Убираем активный класс с текущего GIF
+        currentGifIndex = (currentGifIndex + 1) % gifs.length; // Переходим к следующему GIF
+        gifs[currentGifIndex].classList.add('active'); // Добавляем активный класс к следующему GIF
+    }
+
+    gifs[currentGifIndex].classList.add('active'); // Делаем первый GIF активным
+    setInterval(showNextGif, 5000); // Переключаем GIF каждые 3 секунды
+</script>
+
+</body>
+</html>
+
